@@ -1,5 +1,21 @@
-Hello world
-
-
+<nz-layout nzB>
+  <nz-sider nzWidth="10vw" nzBreakpoint="xxl">
+    <div class="logo">ShopApp</div>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      <li nzSelected routerLink="/login" nz-menu-item>
+        <nz-icon nzType="login" />
+        Login
+      </li>
+      <li routerLink="/registration" nz-menu-item>
+        <nz-icon nzType="user-add" nzTheme="outline" />
+        Register
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header></nz-header>
+    <nz-content></nz-content>
+  </nz-layout>
+</nz-layout>
 
 <router-outlet />
