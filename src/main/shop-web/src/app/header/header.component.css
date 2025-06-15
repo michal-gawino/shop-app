@@ -1,0 +1,36 @@
+.header {
+  position: sticky;
+  display: flex;
+  height: 7vh;
+  color: white;
+  background-color: black;
+
+  .items {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+}
+
+.logo {
+  display: flex;
+  width: 7vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.item {
+  display: flex;
+  width: 6vw;
+  justify-content: center;
+  align-items: center;
+  &:hover, &:focus {
+    background-color: #108ee9;
+  }
+}
+
+nz-icon {
+  display: flex;
+  font-size: 21px;
+  margin: 6px;
+}
