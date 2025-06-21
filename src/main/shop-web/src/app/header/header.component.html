@@ -1,13 +1,31 @@
 <div class="header">
   <div class="logo">ShopApp</div>
   <div class="items">
-    <div class="item" routerLink="/login">
-      <nz-icon nzType="login" nzTheme="outline" />
-      Log in
-    </div>
-    <div class="item" routerLink="/register">
-      <nz-icon nzType="user-add" nzTheme="outline" />
-      Register
-    </div>
+    @if (!isAuthenticated) {
+      <div class="item" routerLink="/login">
+        <nz-icon nzType="login" nzTheme="outline" />
+        Log in
+      </div>
+      <div class="item" routerLink="/register">
+        <nz-icon nzType="user-add" nzTheme="outline" />
+        Register
+      </div>
+    } @else {
+      <div
+        class="item"
+        nz-dropdown
+        [nzDropdownMenu]="profileMenu"
+        nzTrigger="click"
+      >
+        <nz-avatar nzIcon="user"></nz-avatar>
+        <nz-icon nzType="down" nzTheme="outline" />
+      </div>
+    }
   </div>
 </div>
+
+<nz-dropdown-menu #profileMenu="nzDropdownMenu">
+  <div class="profile-content">
+  
+  </div>
+</nz-dropdown-menu>

@@ -34,3 +34,11 @@ nz-icon {
   font-size: 21px;
   margin: 6px;
 }
+
+
+.profile-content {
+  display: flex;
+  background-color: beige;
+  width: 300px;
+  height: 150px;
+}

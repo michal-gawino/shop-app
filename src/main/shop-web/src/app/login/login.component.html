@@ -1,23 +1,38 @@
 <div class="container">
   <div class="login-form">
-    <form nz-form (ngSubmit)="login()">
+    <form nz-form (ngSubmit)="login()" #form="ngForm">
       <nz-form-item>
         <nz-form-control>
           <nz-input-group nzPrefixIcon="user">
-            <input type="text" nz-input placeholder="Username" />
+            <input
+              type="text"
+              nz-input
+              placeholder="Username"
+              name="username"
+              [(ngModel)]="loginForm.username"
+            />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control>
           <nz-input-group nzPrefixIcon="lock">
-            <input type="password" nz-input placeholder="Password" />
+            <input
+              type="password"
+              nz-input
+              placeholder="Password"
+              name="password"
+              [(ngModel)]="loginForm.password"
+            />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <button nz-button class="login-form-button" [nzType]="'primary'">
         Log in
       </button>
+      @if (displayErrorMessage) {
+        <nz-alert nzType="error" nzMessage="Invalid credentials. Please try again"></nz-alert>
+      }
     </form>
   </div>
 </div>

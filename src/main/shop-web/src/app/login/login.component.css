@@ -1,6 +1,6 @@
 .login-form {
-  display: flex;
-  align-items: center;
+  width: 15vw;
+  height: 10vw;
 }
 
 .login-form-button {
@@ -9,6 +9,12 @@
 
 .container {
   height: 93vh;
+  width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+nz-alert {
+  margin-top: 1vh;
 }

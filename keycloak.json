@@ -1,0 +1,8 @@
+{
+  "realm": "shop-realm",
+  "auth-server-url" : "http://localhost:8080",
+  "resource" : "shop-client",
+  "credentials": {
+    "secret": "InQc3I2ocqiqRVXPYNSwUCBmxoveDUQo"
+  }
+}

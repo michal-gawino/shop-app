@@ -3,8 +3,9 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { HeaderComponent } from "./header/header.component";
+import { MenuService } from 'ng-zorro-antd/menu';
+
 
 @Component({
   selector: 'app-root',
@@ -12,12 +13,12 @@ import { HeaderComponent } from "./header/header.component";
     RouterOutlet,
     NzBreadCrumbModule,
     NzIconModule,
-    NzMenuModule,
     NzLayoutModule,
     HeaderComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
+  providers: [MenuService]
 })
 export class AppComponent {
   title = 'shop-web';
