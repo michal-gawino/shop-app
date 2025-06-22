@@ -24,6 +24,7 @@
   width: 6vw;
   justify-content: center;
   align-items: center;
+  gap: 5%;
   &:hover, &:focus {
     background-color: #108ee9;
   }
@@ -32,13 +33,43 @@
 nz-icon {
   display: flex;
   font-size: 21px;
-  margin: 6px;
+}
+
+.spinner {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 
 .profile-content {
   display: flex;
-  background-color: beige;
-  width: 300px;
-  height: 150px;
+  flex-direction: column;
+  width: 15vw;
+  height: 15vh;
+  border-radius: 1vw;
+    border-style: solid;
+  border-width: 1px;
+
+}
+
+.user-email {
+  display: flex;
+  align-self: center;
+  height: 20%;
+}
+
+.avatar {
+  display: flex;
+  height: 50%;
+  justify-content: center;
+  align-items: center;
+  gap: 1vw;
+}
+
+.log-out-button {
+  height: 30%;
+  border-bottom-left-radius: 1vw;
+  border-bottom-right-radius: 1vw;
 }

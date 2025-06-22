@@ -3,7 +3,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth/auth.service';
 import { LoginForm } from './login-form';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';

@@ -1,19 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { LoginForm } from './login/login-form';
-import { environment } from '../environments/environment.development';
-import { Router } from '@angular/router';
+import { LoginForm } from '../login/login-form';
+import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
+import { User } from './User';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private httpClient = inject(HttpClient);
-  private router = inject(Router);
   readonly AUTH_FLAG = 'auth';
 
-  isLoggedInSignal = signal<boolean>(false);
+  isLoggedIn = signal<boolean>(false);
+  currentUser = signal<User | null>(null);
 
   constructor() {}
 
@@ -27,8 +27,24 @@ export class AuthService {
     );
   }
 
+  logout() {
+    return this.httpClient.post<void>(
+      environment.apiUrl + '/auth/logout',
+      null,
+      {
+        withCredentials: true,
+      },
+    );
+  }
+
+  getCurrentUser() {
+    return this.httpClient.get<User>(environment.apiUrl + '/user', {
+      withCredentials: true,
+    });
+  }
+
   setAuthenticated(value: boolean) {
-    this.isLoggedInSignal.set(value);
+    this.isLoggedIn.set(value);
     if (value) {
       localStorage.setItem(this.AUTH_FLAG, 'true');
     } else {
@@ -37,8 +53,10 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return (
-      this.isLoggedInSignal() && localStorage.getItem(this.AUTH_FLAG) != null
-    );
+    return this.isLoggedIn() && localStorage.getItem(this.AUTH_FLAG) != null;
+  }
+
+  setCurrentUser(user: User | null) {
+    this.currentUser.set(user);
   }
 }

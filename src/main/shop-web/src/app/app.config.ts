@@ -23,7 +23,7 @@ import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
-import { AuthService } from './auth.service';
+import { AuthService } from './auth/auth.service';
 
 registerLocaleData(en);
 

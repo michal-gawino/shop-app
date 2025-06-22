@@ -2,8 +2,6 @@ package com.example.shop_app.security;
 
 import com.example.shop_app.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.authorization.client.AuthzClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,8 +33,9 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> {
                     requests.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                            .requestMatchers("/auth/**").permitAll()
-                            .requestMatchers("/").authenticated();
+                            .requestMatchers(HttpMethod.POST, "/auth/logout").authenticated()
+                            .requestMatchers("/auth/token").permitAll()
+                            .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -47,11 +44,7 @@ public class SecurityConfig {
                     oAuth2ResourceServerConfigurer.jwt(jwt -> {
                                 jwt.jwtAuthenticationConverter(jwtAuthenticationConverter());
                             }
-                    ).authenticationEntryPoint((request, response, ex) -> {
-                        if (ex != null) {
-                        }
-
-                    });
+                    );
                 });
 
 
@@ -68,16 +61,6 @@ public class SecurityConfig {
         converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
         converter.setPrincipalClaimName("name");
         return converter;
-    }
-
-    @Bean
-    public AuthzClient authzClient() throws FileNotFoundException {
-        return AuthzClient.create(new FileInputStream("keycloak.json"));
-    }
-
-    @Bean
-    public Keycloak keycloakAdmin() {
-        return Keycloak.getInstance("http://localhost:8080", "shop-realm", "michal", "michal", "admin-cli");
     }
 
     @Bean

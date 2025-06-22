@@ -4,7 +4,6 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { HeaderComponent } from "./header/header.component";
-import { MenuService } from 'ng-zorro-antd/menu';
 
 
 @Component({
@@ -18,7 +17,7 @@ import { MenuService } from 'ng-zorro-antd/menu';
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  providers: [MenuService]
+  providers: []
 })
 export class AppComponent {
   title = 'shop-web';
