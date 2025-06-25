@@ -26,7 +26,6 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 })
 export class HeaderComponent {
   private authService = inject(AuthService);
-  private router = inject(Router);
 
   currentUser: User | null = null;
   isAuthenticated: boolean = false;
@@ -40,13 +39,7 @@ export class HeaderComponent {
   }
 
   logout() {
-    this.authService.logout().subscribe({
-      next: (val) => {
-        this.authService.setAuthenticated(false);
-        this.authService.setCurrentUser(null);
-        this.router.navigate(['/login']);
-      },
-    });
+    this.authService.logout();
   }
 
   getCurrentUser() {
@@ -59,5 +52,9 @@ export class HeaderComponent {
         },
       });
     }
+  }
+
+  refresh() {
+    this.authService.refreshToken().subscribe();
   }
 }

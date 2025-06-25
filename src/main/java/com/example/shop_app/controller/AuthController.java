@@ -23,8 +23,8 @@ public class AuthController {
         authService.login(tokenRequest, response);
     }
 
-    @PostMapping("logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        authService.logout(request, response);
+    @PostMapping("refresh")
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response){
+        authService.refreshToken(request, response);
     }
 }
