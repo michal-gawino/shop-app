@@ -3,8 +3,9 @@ import { inject, Injectable, signal } from '@angular/core';
 import { LoginForm } from '../login/login-form';
 import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
-import { User } from './User';
+import { User } from './user';
 import { Router } from '@angular/router';
+import { RegisterForm } from '../registration/register-form';
 
 @Injectable({
   providedIn: 'root',
@@ -36,12 +37,6 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  getCurrentUser() {
-    return this.httpClient.get<User>(environment.apiUrl + '/user', {
-      withCredentials: true,
-    });
-  }
-
   refreshToken() {
     return this.httpClient.post<void>(
       environment.apiUrl + '/auth/refresh',
@@ -50,6 +45,19 @@ export class AuthService {
         withCredentials: true,
       },
     );
+  }
+
+  register(registerForm: RegisterForm): Observable<void> {
+    return this.httpClient.post<void>(
+      environment.apiUrl + '/auth/register',
+      registerForm,
+    );
+  }
+
+  getCurrentUser() {
+    return this.httpClient.get<User>(environment.apiUrl + '/user', {
+      withCredentials: true,
+    });
   }
 
   setAuthenticated(value: boolean) {

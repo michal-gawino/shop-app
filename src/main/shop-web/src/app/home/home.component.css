@@ -1,3 +1,27 @@
-.content {
+.best-products {
+  display: flex;
+  height: 40vh;
+  margin-top: 2vh;
+  column-gap: 2vw;
+}
 
+.home-category {
+  height: 40vh;
+}
+
+.category-container {
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10%;
+}
+
+.home-product {
+  width: 18vw;
+}
+
+nz-tag {
+  border-radius: 1vw;
+  font-size: medium;
 }

@@ -11,6 +11,7 @@ import {
   LockOutline,
   LoginOutline,
   LogoutOutline,
+  MailOutline,
   UserAddOutline,
   UserOutline,
 } from '@ant-design/icons-angular/icons';
@@ -33,7 +34,8 @@ const icons: IconDefinition[] = [
   UserAddOutline,
   LockOutline,
   UserOutline,
-  LogoutOutline
+  LogoutOutline,
+  MailOutline
 ];
 
 function appInit(): void {

@@ -28,8 +28,11 @@ export class LoginComponent {
 
   loginForm: LoginForm = { username: '', password: '' };
   displayErrorMessage = false;
+  accountCreated = false;
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
   login() {
     this.authService

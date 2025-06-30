@@ -1,1 +1,85 @@
-<p>registration works!</p>
+<div class="register-container">
+  <div class="register-form">
+    <form nz-form (ngSubmit)="register()" #form="ngForm">
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group nzPrefixIcon="user">
+            <input
+              type="text"
+              nz-input
+              placeholder="First name"
+              name="firstname"
+              [(ngModel)]="registerForm.firstName"
+              required
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group nzPrefixIcon="user">
+            <input
+              type="text"
+              nz-input
+              placeholder="Last name"
+              name="lastname"
+              [(ngModel)]="registerForm.lastName"
+              required
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group nzPrefixIcon="mail">
+            <input
+              type="email"
+              nz-input
+              placeholder="Email"
+              name="email"
+              [(ngModel)]="registerForm.email"
+              required
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group nzPrefixIcon="user">
+            <input
+              type="text"
+              nz-input
+              placeholder="User name"
+              name="username"
+              [(ngModel)]="registerForm.username"
+              required
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group nzPrefixIcon="lock">
+            <input
+              type="password"
+              nz-input
+              placeholder="Password"
+              name="password"
+              [(ngModel)]="registerForm.password"
+              #password="ngModel"
+              required
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <button
+        nz-button
+        class="register-button"
+        [nzType]="'primary'"
+        [disabled]="!form.valid"
+      >
+        Register
+      </button>
+    </form>
+  </div>
+</div>

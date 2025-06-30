@@ -6,7 +6,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { User } from '../auth/User';
+import { User } from '../auth/user';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @Component({
@@ -52,9 +52,5 @@ export class HeaderComponent {
         },
       });
     }
-  }
-
-  refresh() {
-    this.authService.refreshToken().subscribe();
   }
 }

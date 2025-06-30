@@ -10,6 +10,7 @@
               placeholder="Username"
               name="username"
               [(ngModel)]="loginForm.username"
+              required
             />
           </nz-input-group>
         </nz-form-control>
@@ -23,15 +24,25 @@
               placeholder="Password"
               name="password"
               [(ngModel)]="loginForm.password"
+              #password="ngModel"
+              required
             />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
-      <button nz-button class="login-form-button" [nzType]="'primary'">
+      <button
+        nz-button
+        class="login-form-button"
+        [nzType]="'primary'"
+        [disabled]="!form.valid"
+      >
         Log in
       </button>
       @if (displayErrorMessage) {
-        <nz-alert nzType="error" nzMessage="Invalid credentials. Please try again"></nz-alert>
+        <nz-alert
+          nzType="error"
+          nzMessage="Invalid credentials. Please try again"
+        ></nz-alert>
       }
     </form>
   </div>

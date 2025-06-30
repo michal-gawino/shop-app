@@ -25,7 +25,8 @@
   justify-content: center;
   align-items: center;
   gap: 5%;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: #108ee9;
   }
 }
@@ -42,16 +43,14 @@ nz-icon {
   justify-content: center;
 }
 
-
 .profile-content {
   display: flex;
   flex-direction: column;
   width: 15vw;
   height: 15vh;
-  border-radius: 1vw;
-    border-style: solid;
+  border-style: solid;
   border-width: 1px;
-
+  background-color: white;
 }
 
 .user-email {
@@ -70,6 +69,4 @@ nz-icon {
 
 .log-out-button {
   height: 30%;
-  border-bottom-left-radius: 1vw;
-  border-bottom-right-radius: 1vw;
 }

@@ -6,4 +6,17 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/shop-realm
+          issuer-uri: ${keycloak.uri}/realms/${keycloak.realm}
+
+
+  data:
+    mongodb:
+      uri: mongodb://localhost/shop
+
+
+keycloak:
+  uri: http://localhost:8080
+  realm: shop-realm
+  client: shop-client
+  secret: InQc3I2ocqiqRVXPYNSwUCBmxoveDUQo
+

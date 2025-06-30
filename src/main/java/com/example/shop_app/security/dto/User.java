@@ -1,5 +1,7 @@
 package com.example.shop_app.security.dto;
 
-public record User (String name, String email){
+import java.util.List;
+
+public record User (String name, String email, List<String> roles){
 
 }

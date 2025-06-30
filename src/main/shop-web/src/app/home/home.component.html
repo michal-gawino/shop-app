@@ -1,4 +1,25 @@
-<p>home works!</p>
+<nz-divider nzText="Best rated products" nzOrientation="left"></nz-divider>
 
+<div class="best-products">
+  @for (product of products; track product.id) {
+    <div class="home-product">
+      <h3>{{ product.title }} </h3>
+      <nz-carousel nzAutoPlay nzEnableSwipe="false">
+        @for (image of product.images; track $index) {
+          <div nz-carousel-content>
+            <img [ngSrc]="image" fill priority/>
+          </div>
+        }
+      </nz-carousel>
+    </div>
+  }
+</div>
 
-
+<nz-divider nzText="Categories" nzOrientation="left"></nz-divider>
+<div class="home-category">
+  <div class="category-container">
+    @for (category of categories; track $index) {
+      <nz-tag (click)="selectCategory(category)">{{ category }}</nz-tag>
+    }
+  </div>
+</div>
