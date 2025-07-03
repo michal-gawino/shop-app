@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  width: 100%;
+  height: 45%;
+  gap: 1%;
+}
+
+.product-image {
+  height: 100%;
+  display: flex;
+  width: 20%;
+}
+
+.product-details {
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
+
+.product-tags {
+  height: 10%;
+}
+
+.product-reviews {
+  height: 36%;
+  overflow: scroll;
+}
+
+
+.details-header {
+  display: flex;
+  width: 100%;
+  height: 3%;
+}

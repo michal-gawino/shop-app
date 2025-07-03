@@ -1,0 +1,54 @@
+<div class="details-header">
+  <button nz-button nzType="primary" (click)="goBack()">
+    <nz-icon nzType="left" />
+    Go back
+  </button>
+</div>
+<div class="container">
+  <div class="product-image">
+    <nz-carousel nzAutoPlay nzEnableSwipe="false" nzDots="false">
+      @for (image of product.images; track $index) {
+        <div nz-carousel-content>
+          <img [ngSrc]="image" fill priority />
+        </div>
+      }
+    </nz-carousel>
+  </div>
+
+  <div class="product-details">
+    <div class="product-rating">
+      <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf></nz-rate>
+    </div>
+    <h3>{{ product.title }} {{ product.price }} $</h3>
+    @if (product.brand) {
+      <h4>{{ product.brand }}</h4>
+    }
+    <div>{{ [product.description] }}</div>
+    <div class="product-tags">
+      @for (tag of product.tags; track $index) {
+        <nz-tag>
+          {{ tag }}
+        </nz-tag>
+      }
+    </div>
+  </div>
+</div>
+<nz-divider
+  nzPlain
+  nzText="Reviews"
+  nzOrientation="left"
+  nzVariant="solid"
+></nz-divider>
+<div class="product-reviews">
+  @for (review of product.reviews; track $index) {
+    <nz-comment
+      [nzAuthor]="review.reviewerName"
+      nzDatetime="{{ review.date | date: 'dd/MM/yyyy HH:mm:ss' }}"
+    >
+      <nz-comment-content>
+        {{ review.comment }}
+        <nz-rate [ngModel]="review.rating" nzDisabled nzAllowHalf></nz-rate>
+      </nz-comment-content>
+    </nz-comment>
+  }
+</div>
