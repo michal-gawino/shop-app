@@ -3,10 +3,15 @@
   height: 40vh;
   margin-top: 2vh;
   column-gap: 2vw;
+  :hover {
+    cursor: pointer;
+    background-color: whitesmoke;
+  }
 }
 
 .home-category {
-  height: 40vh;
+  height: 37vh;
+  margin-top: 4vh;
 }
 
 .category-container {
@@ -14,14 +19,9 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  gap: 10%;
+  gap: 10vh;
 }
 
 .home-product {
   width: 18vw;
-}
-
-nz-tag {
-  border-radius: 1vw;
-  font-size: medium;
 }

@@ -14,6 +14,7 @@ import {
   MailOutline,
   UserAddOutline,
   UserOutline,
+  LeftOutline
 } from '@ant-design/icons-angular/icons';
 import { routes } from './app.routes';
 

@@ -5,8 +5,8 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { RegisterForm } from './register-form';
 import { Router } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthService } from '../auth/auth.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-registration',
@@ -17,7 +17,7 @@ import { AuthService } from '../auth/auth.service';
 export class RegistrationComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
-  private messageService = inject(NzMessageService);
+  private notificationService = inject(NzNotificationService);
 
   registerForm: RegisterForm = {
     firstName: '',
@@ -31,11 +31,11 @@ export class RegistrationComponent {
     this.authService.register(this.registerForm).subscribe({
       next: (val) => {
         this.router.navigate(['/login']);
-        this.messageService.success(
-          'Account successfully created. You can now log in',
-          {
-            nzDuration: 3000,
-          },
+        this.notificationService.success('Account created successfully', 'You can now log in', {
+          nzDuration: 3000,
+          nzPlacement: 'top'
+        }
+          
         );
       },
       error: (err) => {

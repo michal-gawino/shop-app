@@ -2,7 +2,7 @@
   <div class="register-form">
     <form nz-form (ngSubmit)="register()" #form="ngForm">
       <nz-form-item>
-        <nz-form-control>
+        <nz-form-control nzErrorTip="First name is required">
           <nz-input-group nzPrefixIcon="user">
             <input
               type="text"
@@ -16,7 +16,7 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control>
+        <nz-form-control nzErrorTip="Last name is required">
           <nz-input-group nzPrefixIcon="user">
             <input
               type="text"
@@ -30,21 +30,30 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control>
+        <nz-form-control [nzErrorTip]="emailErrorTemplate">
           <nz-input-group nzPrefixIcon="mail">
             <input
-              type="email"
+              email
               nz-input
               placeholder="Email"
               name="email"
               [(ngModel)]="registerForm.email"
+              #email="ngModel"
               required
             />
           </nz-input-group>
+          <ng-template #emailErrorTemplate>
+            @if (email.errors?.required) {
+              Email is required
+            }
+            @if (email.errors?.email) {
+              Entered email is not valid
+            }
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control>
+        <nz-form-control nzErrorTip="User name is required">
           <nz-input-group nzPrefixIcon="user">
             <input
               type="text"
@@ -58,7 +67,7 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control>
+        <nz-form-control [nzErrorTip]="passwordErrorTemplate">
           <nz-input-group nzPrefixIcon="lock">
             <input
               type="password"
@@ -68,8 +77,17 @@
               [(ngModel)]="registerForm.password"
               #password="ngModel"
               required
+              minlength="6"
             />
           </nz-input-group>
+          <ng-template #passwordErrorTemplate>
+            @if (password.errors?.required) {
+              Password is required
+            }
+            @if (password.errors?.minlength) {
+              Password should have at least 6 characters
+            }
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
       <button

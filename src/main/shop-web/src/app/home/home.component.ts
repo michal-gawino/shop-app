@@ -7,16 +7,25 @@ import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { NgOptimizedImage } from '@angular/common';
 import { NzRateModule } from 'ng-zorro-antd/rate';
 import { FormsModule } from '@angular/forms';
-
+import { Router  } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [NzDividerModule, NzTagModule, NzCarouselModule, NgOptimizedImage, NzRateModule, FormsModule],
+  imports: [
+    NzDividerModule,
+    NzTagModule,
+    NzCarouselModule,
+    NgOptimizedImage,
+    NzRateModule,
+    FormsModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
   private productService = inject(ProductService);
+  private router = inject(Router);
+
   categories: Array<string> = [];
   products: Array<Product> | null = null;
 
@@ -25,11 +34,17 @@ export class HomeComponent implements OnInit {
       next: (categories) => (this.categories = categories),
     });
     this.productService.findBestRated().subscribe({
-      next: (products) => this.products = products,
-    })
+      next: (products) => (this.products = products),
+    });
   }
 
   selectCategory(category: string) {
     console.log(category);
+  }
+
+  selectProduct(product: Product) {
+    this.router.navigate(['/product/' + product.id], {
+      state: { data: product },
+    });
   }
 }

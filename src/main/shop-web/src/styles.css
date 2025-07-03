@@ -1,0 +1,12 @@
+nz-tag {
+  font-size: medium;
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(200, 200, 200);
+  }
+}
+
+nz-divider::after,
+nz-divider::before {
+  border-color: black !important;
+}
