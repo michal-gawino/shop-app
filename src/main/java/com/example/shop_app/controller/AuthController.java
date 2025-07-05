@@ -1,7 +1,7 @@
 package com.example.shop_app.controller;
 
-import com.example.shop_app.security.dto.CreateUserRequest;
-import com.example.shop_app.security.dto.TokenRequest;
+import com.example.shop_app.dto.CreateUserRequest;
+import com.example.shop_app.dto.TokenRequest;
 import com.example.shop_app.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

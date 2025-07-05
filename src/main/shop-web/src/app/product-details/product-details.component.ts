@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product } from '../product';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { DatePipe, NgOptimizedImage } from '@angular/common';
@@ -12,6 +11,9 @@ import { NzCommentModule } from 'ng-zorro-antd/comment';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NavigationService } from '../navigation.service';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { Product } from '../product';
+import { ProductAvailability } from './product-availability';
 
 @Component({
   selector: 'app-product-details',
@@ -27,6 +29,7 @@ import { NavigationService } from '../navigation.service';
     DatePipe,
     NzIconModule,
     NzButtonModule,
+    NzProgressModule,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',
@@ -34,11 +37,14 @@ import { NavigationService } from '../navigation.service';
 export class ProductDetailsComponent {
   private router = inject(Router);
   private navigationService = inject(NavigationService)
+  ProductAvailability = ProductAvailability;
   product!: Product;
+
 
   constructor() {
     const navigation = this.router.getCurrentNavigation();
     this.product = navigation?.extras?.state?.data;
+
   }
 
   goBack() {

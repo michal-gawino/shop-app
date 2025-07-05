@@ -28,6 +28,12 @@
   overflow: scroll;
 }
 
+.product-availability {
+  display: flex;
+  width: 10%;
+  font-size: medium;
+  gap: 1vh;
+}
 
 .details-header {
   display: flex;

@@ -6,6 +6,7 @@ import { inject } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 import { basicGuard } from './auth/basic.guard';
 import { ProductDetailsComponent } from './product-details/product-details.component';
+import { ProductComponent } from './product/product.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -14,6 +15,12 @@ export const routes: Routes = [
     path: '',
     pathMatch: 'full',
     component: HomeComponent,
+    canActivate: [basicGuard],
+  },
+  {
+    path: 'product',
+    pathMatch: 'full',
+    component: ProductComponent,
     canActivate: [basicGuard],
   },
   {

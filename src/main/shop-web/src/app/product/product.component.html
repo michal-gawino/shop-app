@@ -1,0 +1,39 @@
+<div class="main-container">
+  <div class="search-container">
+    <div class="search-bar">
+      <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+        <input
+          type="text"
+          nz-input
+          placeholder="Search by name or description"
+        />
+      </nz-input-group>
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch>
+          <nz-icon nzType="search" />
+        </button>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="sub-container">
+    <div class="sidebar">
+      <div></div>
+    </div>
+    @if (products && products.content.length > 0) {
+      <div class="products-container">
+        @for (product of products.content; track product.id) {
+          <div class="product-container">
+            <div class="product-image">
+              <img [ngSrc]="product.thumbnail" fill priority />
+            </div>
+            <div class="product-extra">
+              <div>{{product.title}}</div>
+              <div>{{product.price}} $ <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf></nz-rate></div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

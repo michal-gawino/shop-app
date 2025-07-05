@@ -3,9 +3,9 @@ package com.example.shop_app.service;
 import com.example.shop_app.config.KeycloakProperties;
 import com.example.shop_app.exceptions.CannotRefreshTokenException;
 import com.example.shop_app.exceptions.UserCreationException;
-import com.example.shop_app.security.dto.CreateUserRequest;
-import com.example.shop_app.security.dto.TokenRequest;
-import com.example.shop_app.security.dto.User;
+import com.example.shop_app.dto.CreateUserRequest;
+import com.example.shop_app.dto.TokenRequest;
+import com.example.shop_app.dto.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -70,22 +70,10 @@ public class AuthService {
     public void register(CreateUserRequest request) {
         RealmResource realm = adminClient.realm(keycloakProperties.getRealm());
         UsersResource usersResource = realm.users();
-        UserRepresentation userRepresentation = new UserRepresentation();
-        CredentialRepresentation password = new CredentialRepresentation();
-        password.setType(CredentialRepresentation.PASSWORD);
-        password.setValue(request.password());
-        password.setTemporary(false);
-        userRepresentation.setEnabled(true);
-        userRepresentation.setEmailVerified(true);
-        userRepresentation.setUsername(request.username());
-        userRepresentation.setFirstName(request.firstName());
-        userRepresentation.setLastName(request.lastName());
-        userRepresentation.setEmail(request.email());
-        userRepresentation.setCredentials(List.of(password));
+        UserRepresentation userRepresentation = getUserRepresentation(request);
 
         try (Response response = realm.users().create(userRepresentation)) {
             if (response.getStatus() != HttpStatus.CREATED.value()) {
-                System.out.println(response.getStatus());
                 throw new UserCreationException();
             }
             UserRepresentation user = realm.users().search(request.username()).get(0);
@@ -98,6 +86,22 @@ public class AuthService {
         }
 
 
+    }
+
+    private UserRepresentation getUserRepresentation(CreateUserRequest request) {
+        UserRepresentation userRepresentation = new UserRepresentation();
+        CredentialRepresentation password = new CredentialRepresentation();
+        password.setType(CredentialRepresentation.PASSWORD);
+        password.setValue(request.password());
+        password.setTemporary(false);
+        userRepresentation.setEnabled(true);
+        userRepresentation.setEmailVerified(true);
+        userRepresentation.setUsername(request.username());
+        userRepresentation.setFirstName(request.firstName());
+        userRepresentation.setLastName(request.lastName());
+        userRepresentation.setEmail(request.email());
+        userRepresentation.setCredentials(List.of(password));
+        return userRepresentation;
     }
 
     public User getCurrentUser(Authentication authentication) {

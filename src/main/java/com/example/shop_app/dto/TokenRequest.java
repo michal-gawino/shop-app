@@ -1,4 +1,4 @@
-package com.example.shop_app.security.dto;
+package com.example.shop_app.dto;
 
 public record TokenRequest(String username, String password) {
 }

@@ -1,4 +1,5 @@
 import { Review } from "./review";
+import { ProductAvailability } from "./product-details/product-availability";
 
 export interface Product {
     id: number,
@@ -9,7 +10,7 @@ export interface Product {
     rating: number,
     tags: Array<string>,
     brand: string,
-    availabilityStatus: string,
+    availabilityStatus: ProductAvailability,
     reviews: Array<Review>
     thumbnail: string;
     images: Array<string>

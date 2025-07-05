@@ -23,7 +23,38 @@
     @if (product.brand) {
       <h4>{{ product.brand }}</h4>
     }
-    <div>{{ [product.description] }}</div>
+    {{ product.description }}
+
+    <div class="product-availability">
+      @switch (product.availabilityStatus) {
+        @case (ProductAvailability.IN_STOCK) {
+          <nz-progress
+            [nzPercent]="100"
+            [nzSteps]="3"
+            nzStrokeColor="green"
+            [nzShowInfo]="false"
+          ></nz-progress>
+        }
+        @case (ProductAvailability.LOW_STOCK) {
+          <nz-progress
+            [nzPercent]="67"
+            [nzSteps]="3"
+            nzStrokeColor="orange"
+            [nzShowInfo]="false"
+          ></nz-progress>
+        }
+        @case (ProductAvailability.OUT_OF_STOCK) {
+          <nz-progress
+            [nzPercent]="30"
+            [nzSteps]="3"
+            nzStrokeColor="red"
+            [nzShowInfo]="false"
+          ></nz-progress>
+        }
+      }
+
+      {{ product.availabilityStatus }}
+    </div>
     <div class="product-tags">
       @for (tag of product.tags; track $index) {
         <nz-tag>

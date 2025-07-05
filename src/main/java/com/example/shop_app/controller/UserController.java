@@ -1,6 +1,6 @@
 package com.example.shop_app.controller;
 
-import com.example.shop_app.security.dto.User;
+import com.example.shop_app.dto.User;
 import com.example.shop_app.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

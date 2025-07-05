@@ -1,11 +1,12 @@
 package com.example.shop_app.controller;
 
+import com.example.shop_app.dto.SearchRequest;
 import com.example.shop_app.entity.Product;
 import com.example.shop_app.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +25,11 @@ public class ProductController {
     @GetMapping(path = "best-rated")
     public List<Product> getBestRatedProducts(){
         return productService.findTop5BestRated();
+    }
+
+    @PostMapping("search")
+    public Page<Product> search(@RequestBody SearchRequest searchRequest, Pageable pageable){
+        return productService.search(searchRequest, pageable);
     }
 
 }
