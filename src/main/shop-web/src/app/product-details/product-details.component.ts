@@ -12,7 +12,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NavigationService } from '../navigation.service';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
-import { Product } from '../product';
+import { Product } from '../product/product.model';
 import { ProductAvailability } from './product-availability';
 
 @Component({

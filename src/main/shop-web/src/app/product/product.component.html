@@ -15,24 +15,46 @@
       </ng-template>
     </div>
   </div>
-
   <div class="sub-container">
-    <div class="sidebar">
-      <div></div>
-    </div>
-    @if (products && products.content.length > 0) {
+    @if (loading) {
+      <div class="loader">
+        <nz-spin nzTip="Loading..." nzSize="large"></nz-spin>
+      </div>
+    } @else {
+      @let page = response!.page;
+      @let facet = response!.facet;
+      <div class="sidebar">
+        {{ facet.categories }}
+      </div>
       <div class="products-container">
-        @for (product of products.content; track product.id) {
+        @for (product of page.content; track product.id) {
           <div class="product-container">
             <div class="product-image">
-              <img [ngSrc]="product.thumbnail" fill priority />
+              <img [ngSrc]="product.thumbnail" fill priority/>
             </div>
             <div class="product-extra">
-              <div>{{product.title}}</div>
-              <div>{{product.price}} $ <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf></nz-rate></div>
+              <div>{{ product.title }}</div>
+              <div>
+                {{ product.price }} $
+                <nz-rate
+                  [ngModel]="product.rating"
+                  nzDisabled
+                  nzAllowHalf
+                ></nz-rate>
+              </div>
             </div>
           </div>
         }
+        <div class="items-pagination">
+          <nz-pagination
+            [nzPageIndex]="page.number + 1"
+            [nzTotal]="page.totalElements"
+            [nzPageSize]="page.size"
+            nzShowSizeChanger
+            (nzPageIndexChange)="pageChanged($event)"
+            (nzPageSizeChange)="numberOfItemsChanged($event)"
+          ></nz-pagination>
+        </div>
       </div>
     }
   </div>

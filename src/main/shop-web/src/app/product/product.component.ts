@@ -6,10 +6,14 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { Product } from '../product';
-import { ProductService } from '../product.service';
-import { Page } from '../page';
+import { Product } from './product.model';
+import { ProductService } from './product.service';
+import { Page } from '../shared/models/page';
 import { NzRateModule } from 'ng-zorro-antd/rate';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { PageRequest } from '../shared/models/page.request';
+import { SearchResponse } from '../shared/models/search.model';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @Component({
   selector: 'app-product',
@@ -21,7 +25,9 @@ import { NzRateModule } from 'ng-zorro-antd/rate';
     NzButtonModule,
     NzCardModule,
     NgOptimizedImage,
-    NzRateModule
+    NzRateModule,
+    NzPaginationModule,
+    NzSpinModule
   ],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css',
@@ -29,12 +35,29 @@ import { NzRateModule } from 'ng-zorro-antd/rate';
 export class ProductComponent implements OnInit {
   private productService = inject(ProductService);
 
-  products: Page<Product> | null = null;
+  response: SearchResponse<Product> | null = null;
+  pageRequest: PageRequest = { pageNumber: 0, size: 20 };
+  loading: boolean = true;
 
   ngOnInit(): void {
-    this.productService.search().subscribe({
-      next: (products) => {
-        this.products = products;
+    this.getProducts();
+  }
+
+  pageChanged(pageNumber: number) {
+    this.pageRequest.pageNumber = pageNumber - 1;
+    this.getProducts();
+  }
+
+  numberOfItemsChanged(numberOfItems: number) {
+    this.pageRequest.size = numberOfItems;
+    this.getProducts();
+  }
+
+  getProducts(): void {
+    this.productService.search(this.pageRequest).subscribe({
+      next: (response) => {
+        this.response = response;
+        this.loading = false;
       },
     });
   }

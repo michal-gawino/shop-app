@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ProductService } from '../product.service';
+import { ProductService } from '../product/product.service';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
@@ -7,7 +7,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { NzRateModule } from 'ng-zorro-antd/rate';
 import { FormsModule } from '@angular/forms';
 import { Router  } from '@angular/router';
-import { Product } from '../product';
+import { Product } from '../product/product.model';
 
 @Component({
   selector: 'app-home',

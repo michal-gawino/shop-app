@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
-import { Product } from './product';
-import { Page } from './page';
+import { environment } from '../../environments/environment';
+import { Product } from './product.model';
+import { Page } from '../shared/models/page';
+import { PageRequest } from '../shared/models/page.request';
+import { SearchResponse } from '../shared/models/search.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,13 +12,12 @@ import { Page } from './page';
 export class ProductService {
   private httpClient = inject(HttpClient);
 
-  search() {
-    return this.httpClient.post<Page<Product>>(
+  search(pageParams: PageRequest) {
+    return this.httpClient.post<SearchResponse<Product>>(
       environment.apiUrl + '/product/search',
+      {},
       {
-
-      },
-      {
+        params: { page: pageParams.pageNumber, size: pageParams.size },
         withCredentials: true,
       },
     );

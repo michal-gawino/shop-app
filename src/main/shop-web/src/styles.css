@@ -10,3 +10,9 @@ nz-divider::after,
 nz-divider::before {
   border-color: black !important;
 }
+
+
+.loader {
+  width: 100%;
+  align-content: center;
+}

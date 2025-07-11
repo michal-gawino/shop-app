@@ -73,8 +73,8 @@
 <div class="product-reviews">
   @for (review of product.reviews; track $index) {
     <nz-comment
-      [nzAuthor]="review.reviewerName"
-      nzDatetime="{{ review.date | date: 'dd/MM/yyyy HH:mm:ss' }}"
+      [nzAuthor]="review.name"
+      nzDatetime="{{ review.reviewDate | date: 'dd/MM/yyyy HH:mm:ss' }}"
     >
       <nz-comment-content>
         {{ review.comment }}

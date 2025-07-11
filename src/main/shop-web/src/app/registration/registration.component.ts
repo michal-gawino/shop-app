@@ -3,10 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { RegisterForm } from './register-form';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { RegisterForm } from './register-form';
 
 @Component({
   selector: 'app-registration',
