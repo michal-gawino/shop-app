@@ -1,0 +1,34 @@
+<ul nz-menu nzMode="inline">
+  @for (facet of facets(); track $index) {
+    @if (facet.values.length > 0) {
+      <li nz-submenu nzTitle="{{ facet.name }}">
+        <ul class="search-filter">
+          @let singleValued = facet.values.at(0)?.value !== null;
+          <nz-checkbox-group
+            [(ngModel)]="options"
+            (ngModelChange)="addValueToFacet(facet.name, $event)"
+          >
+            <nz-list>
+              @for (item of facet.values; track $index) {
+                <nz-list-item>
+                  <label
+                    nz-checkbox
+                    [nzValue]="item"
+                  >
+                    @if (singleValued) {
+                      {{ item.value }}
+                    } @else {
+                      {{ item.range.min }} $ - {{ item.range.max }} $ ({{
+                        item.count
+                      }})
+                    }
+                  </label>
+                </nz-list-item>
+              }
+            </nz-list>
+          </nz-checkbox-group>
+        </ul>
+      </li>
+    }
+  }
+</ul>

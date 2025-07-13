@@ -1,5 +1,8 @@
 package com.example.shop_app.search;
 
-public record RangeValue(Range range, int count) {
+
+import jakarta.annotation.Nullable;
+
+public record RangeValue (Range value, @Nullable Integer count) {
 
 }

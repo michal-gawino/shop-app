@@ -1,0 +1,22 @@
+.search-filter {
+  height: 31vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  word-wrap: break-word;
+}
+
+nz-list {
+  width: 20vw;
+}
+
+ul[nz-menu] {
+   border-style: solid;
+  border-width: 1px;
+  border-color: black;
+}
+
+li[nz-submenu] {
+   border-style: solid;
+  border-width: 1px;
+  border-color: black;
+}

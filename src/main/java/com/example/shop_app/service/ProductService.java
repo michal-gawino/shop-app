@@ -5,7 +5,9 @@ import com.example.shop_app.entity.Product;
 import com.example.shop_app.repository.ProductRepository;
 import com.example.shop_app.search.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -62,7 +64,7 @@ public class ProductService {
         AggregationResults<AggregationResponse> aggregationResults = mongoTemplate.aggregate(aggregation, Product.class, AggregationResponse.class);
         AggregationResponse aggregationResponse = Optional.ofNullable(aggregationResults.getUniqueMappedResult()).orElse(AggregationResponse.empty());
         PageImpl<Product> page = new PageImpl<>(aggregationResponse.results(), pageable, count);
-        Facet facet = new Facet(aggregationResponse.tags(), aggregationResponse.categories(), aggregationResponse.prices(), aggregationResponse.ratings());
-        return new SearchResponse<>(page, facet);
+        List<Facet> facets = List.of(new Facet("Tags", aggregationResponse.tags()), new Facet("Categories", aggregationResponse.categories()), new Facet("Price", aggregationResponse.prices()), new Facet("Rating", aggregationResponse.ratings()));
+        return new SearchResponse<>(page, facets);
     }
 }

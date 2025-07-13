@@ -8,12 +8,12 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { Product } from './product.model';
 import { ProductService } from './product.service';
-import { Page } from '../shared/models/page';
 import { NzRateModule } from 'ng-zorro-antd/rate';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { PageRequest } from '../shared/models/page.request';
 import { SearchResponse } from '../shared/models/search.model';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { ProductFacetComponent } from '../product-facet/product-facet.component';
 
 @Component({
   selector: 'app-product',
@@ -27,8 +27,9 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NgOptimizedImage,
     NzRateModule,
     NzPaginationModule,
-    NzSpinModule
-  ],
+    NzSpinModule,
+    ProductFacetComponent
+],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css',
 })

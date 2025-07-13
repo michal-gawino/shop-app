@@ -17,6 +17,9 @@
   width: 7vw;
   justify-content: center;
   align-items: center;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .item {

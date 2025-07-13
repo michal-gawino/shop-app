@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Product } from './product.model';
-import { Page } from '../shared/models/page';
 import { PageRequest } from '../shared/models/page.request';
 import { SearchResponse } from '../shared/models/search.model';
 

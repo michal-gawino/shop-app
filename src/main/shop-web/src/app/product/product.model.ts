@@ -1,5 +1,4 @@
 import { ProductAvailability } from '../product-details/product-availability';
-import { Page } from '../shared/models/page';
 
 export interface Product {
   id: number;

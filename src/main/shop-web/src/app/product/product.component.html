@@ -22,15 +22,15 @@
       </div>
     } @else {
       @let page = response!.page;
-      @let facet = response!.facet;
+      @let facets = response!.facets;
       <div class="sidebar">
-        {{ facet.categories }}
+        <app-product-facet [facets]="facets"></app-product-facet>
       </div>
       <div class="products-container">
         @for (product of page.content; track product.id) {
           <div class="product-container">
             <div class="product-image">
-              <img [ngSrc]="product.thumbnail" fill priority/>
+              <img [ngSrc]="product.thumbnail" fill priority />
             </div>
             <div class="product-extra">
               <div>{{ product.title }}</div>
