@@ -1,33 +1,31 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ProductService } from '../product/product.service';
-import { NzTagModule } from 'ng-zorro-antd/tag';
+import { ProductService } from '../search/search.service';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzCarouselModule } from 'ng-zorro-antd/carousel';
-import { NgOptimizedImage } from '@angular/common';
 import { NzRateModule } from 'ng-zorro-antd/rate';
 import { FormsModule } from '@angular/forms';
-import { Router  } from '@angular/router';
-import { Product } from '../product/product.model';
+import { Product, ProductView } from '../shared/models/product.model';
+import { ProductComponent } from '../product/product.component';
+import { CategoryComponent } from "../category/category.component";
 
 @Component({
   selector: 'app-home',
   imports: [
     NzDividerModule,
-    NzTagModule,
-    NzCarouselModule,
-    NgOptimizedImage,
     NzRateModule,
     FormsModule,
-  ],
+    ProductComponent,
+    CategoryComponent,
+    CategoryComponent
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
   private productService = inject(ProductService);
-  private router = inject(Router);
 
   categories: Array<string> = [];
-  products: Array<Product> | null = null;
+  products: Array<Product> = [];
+  productView = ProductView.HOME;
 
   ngOnInit(): void {
     this.productService.findAllProductCategories().subscribe({
@@ -35,16 +33,6 @@ export class HomeComponent implements OnInit {
     });
     this.productService.findBestRated().subscribe({
       next: (products) => (this.products = products),
-    });
-  }
-
-  selectCategory(category: string) {
-    console.log(category);
-  }
-
-  selectProduct(product: Product) {
-    this.router.navigate(['/product/' + product.id], {
-      state: { data: product },
     });
   }
 }

@@ -1,3 +1,36 @@
+.main-container {
+  height: 93vh;
+  width: 100%;
+}
+
+.search-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-bar {
+  width: 20%;
+}
+
+.sub-container {
+  display: flex;
+  width: 100%;
+  height: 88vh;
+}
+
+.sidebar {
+  width: 15%;
+  height: 100%;
+}
+
+.items-pagination {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
 .products-container {
   margin-left: auto;
   display: flex;
@@ -13,10 +46,6 @@
   width: 17vw;
   height: 34vh;
   margin: 1vh;
-  :hover {
-    cursor: pointer;
-    background-color: whitesmoke;
-  }
 }
 
 .product-image {
@@ -31,9 +60,4 @@
   flex-direction: column;
   height: 20%;
   width: 100%;
-}
-
-.home-product {
-  height: 100%;
-  width: 18vw;
 }

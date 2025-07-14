@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Product } from './product.model';
 import { PageRequest } from '../shared/models/page.request';
 import { SearchResponse } from '../shared/models/search.model';
+import { Product } from '../shared/models/product.model';
 
 @Injectable({
   providedIn: 'root',

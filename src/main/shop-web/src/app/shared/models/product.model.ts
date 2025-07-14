@@ -1,4 +1,9 @@
-import { ProductAvailability } from '../product-details/product-availability';
+import { ProductAvailability } from "../../product-details/product-availability";
+
+export enum ProductView {
+    HOME = 'HOME',
+    PAGED = 'PAGED'
+}
 
 export interface Product {
   id: number;

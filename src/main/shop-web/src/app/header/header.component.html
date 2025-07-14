@@ -11,6 +11,9 @@
         Register
       </div>
     } @else {
+      <div class="item" routerLink="/product">
+        Products
+      </div>
       <div
         class="item"
         nz-dropdown
@@ -24,7 +27,11 @@
       <nz-dropdown-menu #profileMenu="nzDropdownMenu">
         <div class="profile-content">
           @if (isLoading) {
-            <nz-spin class="spinner" nzTip="Loading..." nzSize="large"></nz-spin>
+            <nz-spin
+              class="spinner"
+              nzTip="Loading..."
+              nzSize="large"
+            ></nz-spin>
           } @else {
             <div class="user-email">{{ currentUser?.email }}</div>
             <div class="avatar">

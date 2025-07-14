@@ -1,61 +1,33 @@
-<div class="main-container">
-  <div class="search-container">
-    <div class="search-bar">
-      <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-        <input
-          type="text"
-          nz-input
-          placeholder="Search by name or description"
-        />
-      </nz-input-group>
-      <ng-template #suffixIconButton>
-        <button nz-button nzType="primary" nzSearch>
-          <nz-icon nzType="search" />
-        </button>
-      </ng-template>
-    </div>
-  </div>
-  <div class="sub-container">
-    @if (loading) {
-      <div class="loader">
-        <nz-spin nzTip="Loading..." nzSize="large"></nz-spin>
-      </div>
-    } @else {
-      @let page = response!.page;
-      @let facets = response!.facets;
-      <div class="sidebar">
-        <app-product-facet [facets]="facets"></app-product-facet>
-      </div>
-      <div class="products-container">
-        @for (product of page.content; track product.id) {
-          <div class="product-container">
-            <div class="product-image">
-              <img [ngSrc]="product.thumbnail" fill priority />
-            </div>
-            <div class="product-extra">
-              <div>{{ product.title }}</div>
-              <div>
-                {{ product.price }} $
-                <nz-rate
-                  [ngModel]="product.rating"
-                  nzDisabled
-                  nzAllowHalf
-                ></nz-rate>
-              </div>
-            </div>
+<ng-template #productTemplate>
+  @if (view() === ProductView.HOME) {
+    <div class="home-product" (click)="selectProduct(product()!)">
+      <h3>{{ product().title }}</h3>
+      <nz-carousel nzAutoPlay nzEnableSwipe="false" nzDots="false">
+        @for (image of product().images; track $index) {
+          <div nz-carousel-content>
+            <img [ngSrc]="image" fill priority />
           </div>
         }
-        <div class="items-pagination">
-          <nz-pagination
-            [nzPageIndex]="page.number + 1"
-            [nzTotal]="page.totalElements"
-            [nzPageSize]="page.size"
-            nzShowSizeChanger
-            (nzPageIndexChange)="pageChanged($event)"
-            (nzPageSizeChange)="numberOfItemsChanged($event)"
-          ></nz-pagination>
+      </nz-carousel>
+    </div>
+  } @else {
+    <div class="product-container" (click)="selectProduct(product())">
+      <div class="product-image">
+        <img [ngSrc]="product().thumbnail" fill priority />
+      </div>
+      <div class="product-extra">
+        <div>{{ product().title }}</div>
+        <div>
+          {{ product().price }} $
+          <nz-rate
+            [ngModel]="product().rating"
+            nzDisabled
+            nzAllowHalf
+          ></nz-rate>
         </div>
       </div>
-    }
-  </div>
-</div>
+    </div>
+  }
+</ng-template>
+
+<ng-container [ngTemplateOutlet]="productTemplate"> </ng-container>

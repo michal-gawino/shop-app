@@ -1,17 +1,8 @@
 <nz-divider nzText="Best rated products" nzOrientation="left"></nz-divider>
 
-<div class="best-products fill-div">
+<div class="best-products">
   @for (product of products; track product.id) {
-    <div class="home-product" (click)="selectProduct(product)">
-      <h3>{{ product.title }}</h3>
-      <nz-carousel nzAutoPlay nzEnableSwipe="false" nzDots="false">
-        @for (image of product.images; track $index) {
-          <div nz-carousel-content>
-            <img [ngSrc]="image" fill priority />
-          </div>
-        }
-      </nz-carousel>
-    </div>
+     <app-product [view]="productView" [product]="product"></app-product>
   }
 </div>
 
@@ -19,7 +10,7 @@
   <nz-divider nzText="Categories" nzOrientation="left"></nz-divider>
   <div class="category-container">
     @for (category of categories; track $index) {
-      <nz-tag (click)="selectCategory(category)">{{ category }}</nz-tag>
+      <app-category [category]="category"></app-category>
     }
   </div>
 </div>

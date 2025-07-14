@@ -6,7 +6,6 @@ import { Facet, FacetValue, Range } from '../shared/models/search.model';
 import { FormsModule } from '@angular/forms';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-product-facet',
@@ -15,8 +14,7 @@ import { NgTemplateOutlet } from '@angular/common';
     NzCheckboxModule,
     FormsModule,
     NzListModule,
-    NzInputModule,
-    NgTemplateOutlet,
+    NzInputModule
   ],
   templateUrl: './product-facet.component.html',
   styleUrl: './product-facet.component.css',
