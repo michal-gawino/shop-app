@@ -13,7 +13,7 @@
   } @else {
     <div class="product-container" (click)="selectProduct(product())">
       <div class="product-image">
-        <img [ngSrc]="product().thumbnail" fill priority />
+        <img [ngSrc]="product().thumbnail" fill/>
       </div>
       <div class="product-extra">
         <div>{{ product().title }}</div>

@@ -6,6 +6,8 @@
           type="text"
           nz-input
           placeholder="Search by name or description"
+          [ngModel]="searchRequest.query"
+          (ngModelChange)="onSearchQueryChange($event)"
         />
       </nz-input-group>
       <ng-template #suffixIconButton>
@@ -16,15 +18,16 @@
     </div>
   </div>
   <div class="sub-container">
-    @if (loading) {
+    @if (!isLoaded) {
       <div class="loader">
         <nz-spin nzTip="Loading..." nzSize="large"></nz-spin>
       </div>
     } @else {
-      @let page = response!.page;
-      @let facets = response!.facets;
+      @let page = products!;
       <div class="sidebar">
-        <app-product-facet [facets]="facets"></app-product-facet>
+        @for (facet of facets; track $index) {
+          <app-product-facet [facet]="facet" (selectedOptions)="selectedOptionsChanged($event)"></app-product-facet>
+        }
       </div>
       <div class="products-container">
         @for (product of page.content; track product.id) {

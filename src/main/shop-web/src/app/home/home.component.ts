@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ProductService } from '../search/search.service';
+import { ProductService } from '../search/product.service';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzRateModule } from 'ng-zorro-antd/rate';
 import { FormsModule } from '@angular/forms';

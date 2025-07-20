@@ -1,4 +1,8 @@
 package com.example.shop_app.dto;
 
-public record SearchRequest() {
+import com.example.shop_app.search.Facet;
+
+import java.util.List;
+
+public record SearchRequest(String query, List<Facet> facets) {
 }
