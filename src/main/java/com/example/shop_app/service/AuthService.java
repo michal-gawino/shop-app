@@ -21,12 +21,13 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
+import java.text.ParseException;
 import java.util.*;
 
 @Service
@@ -47,9 +48,11 @@ public class AuthService {
     @Autowired
     private KeycloakProperties keycloakProperties;
 
-    public void login(TokenRequest tokenRequest, HttpServletResponse response) {
+    public User login(TokenRequest tokenRequest, HttpServletResponse response) throws ParseException, InterruptedException {
         AccessTokenResponse accessTokenResponse = authzClient.obtainAccessToken(tokenRequest.username(), tokenRequest.password());
         setCookies(response, accessTokenResponse);
+        Jwt token = JwtDecoders.fromIssuerLocation(keycloakProperties.getIssuer()).decode(accessTokenResponse.getToken());
+        return getCurrentUser(token);
     }
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
@@ -104,11 +107,10 @@ public class AuthService {
         return userRepresentation;
     }
 
-    public User getCurrentUser(Authentication authentication) {
-        Jwt jwt = (Jwt) authentication.getCredentials();
-        String name = jwt.getClaimAsString("name");
-        String email = jwt.getClaimAsString("email");
-        List<String> roles = jwt.getClaimAsStringList("roles");
+    public User getCurrentUser(Jwt token) {
+        String name = token.getClaimAsString("name");
+        String email = token.getClaimAsString("email");
+        List<String> roles = token.getClaimAsStringList("roles");
         return new User(name, email, roles);
     }
 

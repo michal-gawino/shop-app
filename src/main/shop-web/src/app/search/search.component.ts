@@ -16,7 +16,8 @@ import { ProductFacetComponent } from '../product-facet/product-facet.component'
 import { Product, ProductView } from '../shared/models/product.model';
 import { ProductComponent } from '../product/product.component';
 import { Page } from '../shared/models/page';
-import { debounceTime, distinctUntilChanged, map, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 @Component({
   selector: 'app-search',
@@ -32,6 +33,7 @@ import { debounceTime, distinctUntilChanged, map, Subject } from 'rxjs';
     NzSpinModule,
     ProductFacetComponent,
     ProductComponent,
+    NzEmptyModule,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css',
@@ -51,7 +53,7 @@ export class Searchomponent implements OnInit {
   ngOnInit(): void {
     this.getProductsWithFacets(false);
     this.inputQuery$
-      .pipe(debounceTime(700), distinctUntilChanged())
+      .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe((val) => {
         this.searchRequest.query = val;
         this.getProductsWithFacets(true);
@@ -69,12 +71,14 @@ export class Searchomponent implements OnInit {
   }
 
   onSearchQueryChange(value: string) {
+    this.pageRequest.pageNumber = 0;
     this.inputQuery$.next(value);
   }
 
   selectedOptionsChanged(facet: Facet) {
     this.facetMap.set(facet.name, facet);
     this.searchRequest.facets = [...this.facetMap.values()];
+    this.pageRequest.pageNumber = 0;
     this.getProductsWithFacets(true);
   }
 

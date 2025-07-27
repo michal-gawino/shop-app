@@ -28,29 +28,15 @@ export class HeaderComponent {
   private authService = inject(AuthService);
 
   currentUser: User | null = null;
-  isAuthenticated: boolean = false;
   isLoading: boolean = false;
 
   constructor() {
     effect(() => {
-      this.isAuthenticated = this.authService.isAuthenticated();
       this.currentUser = this.authService.currentUser();
     });
   }
 
   logout() {
     this.authService.logout();
-  }
-
-  getCurrentUser() {
-    if (this.currentUser === null) {
-      this.isLoading = true;
-      this.authService.getCurrentUser().subscribe({
-        next: (user) => {
-          this.authService.setCurrentUser(user);
-          this.isLoading = false;
-        },
-      });
-    }
   }
 }

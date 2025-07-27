@@ -42,7 +42,7 @@ export class LoginComponent {
       })
       .subscribe({
         next: (res) => {
-          this.authService.setAuthenticated(true);
+          this.authService.setCurrentUser(res);
           this.router.navigate(['/home']);
         },
         error: (err) => {

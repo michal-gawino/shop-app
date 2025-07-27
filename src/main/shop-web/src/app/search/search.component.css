@@ -61,3 +61,10 @@
   height: 20%;
   width: 100%;
 }
+
+.empty-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 85%;
+}

@@ -2,6 +2,7 @@ package com.example.shop_app.controller;
 
 import com.example.shop_app.dto.CreateUserRequest;
 import com.example.shop_app.dto.TokenRequest;
+import com.example.shop_app.dto.User;
 import com.example.shop_app.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+
 @RestController
 @RequestMapping(path = "/auth")
 public class AuthController {
@@ -19,8 +22,8 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("token")
-    public void setToken(@RequestBody TokenRequest tokenRequest, HttpServletResponse response) {
-        authService.login(tokenRequest, response);
+    public User setToken(@RequestBody TokenRequest tokenRequest, HttpServletResponse response) throws ParseException, InterruptedException {
+        return authService.login(tokenRequest, response);
     }
 
     @PostMapping("refresh")

@@ -6,7 +6,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${keycloak.uri}/realms/${keycloak.realm}
+          issuer-uri: ${keycloak.issuer}
 
 
   data:
@@ -19,4 +19,5 @@ keycloak:
   realm: shop-realm
   client: shop-client
   secret: InQc3I2ocqiqRVXPYNSwUCBmxoveDUQo
+  issuer: ${keycloak.uri}/realms/${keycloak.realm}
 

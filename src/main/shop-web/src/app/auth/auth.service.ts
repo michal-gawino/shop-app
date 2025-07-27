@@ -14,15 +14,14 @@ export class AuthService {
   private httpClient = inject(HttpClient);
   private router = inject(Router);
 
-  readonly AUTH_FLAG = 'auth';
-
-  isLoggedIn = signal<boolean>(false);
   currentUser = signal<User | null>(null);
 
-  constructor() {}
+  constructor() {
+    
+  }
 
-  login(loginForm: LoginForm): Observable<void> {
-    return this.httpClient.post<void>(
+  login(loginForm: LoginForm): Observable<User> {
+    return this.httpClient.post<User>(
       environment.apiUrl + '/auth/token',
       loginForm,
       {
@@ -32,7 +31,6 @@ export class AuthService {
   }
 
   logout() {
-    this.setAuthenticated(false);
     this.setCurrentUser(null);
     this.router.navigate(['/login']);
   }
@@ -60,17 +58,8 @@ export class AuthService {
     });
   }
 
-  setAuthenticated(value: boolean) {
-    this.isLoggedIn.set(value);
-    if (value) {
-      localStorage.setItem(this.AUTH_FLAG, 'true');
-    } else {
-      localStorage.removeItem(this.AUTH_FLAG);
-    }
-  }
-
   isAuthenticated(): boolean {
-    return this.isLoggedIn() && localStorage.getItem(this.AUTH_FLAG) != null;
+    return this.currentUser() != null;
   }
 
   setCurrentUser(user: User | null) {

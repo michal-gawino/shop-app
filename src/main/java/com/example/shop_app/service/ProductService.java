@@ -92,7 +92,7 @@ public class ProductService {
                         criteriaList.add(Criteria.where(fieldName).gte(r.min()).lte(r.max()));
                     });
                     if (criteriaList.size() > 1) {
-                        Criteria criteria = Criteria.where(fieldName).orOperator(criteriaList);
+                        Criteria criteria = Criteria.where("").orOperator(criteriaList);
                         mainFilters.add(criteria);
                     } else {
                         mainFilters.add(criteriaList.getFirst());
@@ -105,14 +105,12 @@ public class ProductService {
         if (query != null && !query.isEmpty()) {
             Set<Criteria> criteriaSet = Arrays.stream(textFields).map(f -> Criteria.where(f).regex(query, "i")).collect(Collectors.toSet());
             Criteria textCriteria = Criteria.where("").orOperator(criteriaSet);
-            System.out.println(textCriteria.getCriteriaObject());
             mainFilters.add(textCriteria);
         }
         if (mainFilters.isEmpty()) {
             mainFilters.add(Criteria.where("_id").exists(true));
         }
         Criteria mainFilter = Criteria.where("").andOperator(mainFilters);
-        System.out.println(mainFilter.getCriteriaObject());
         return mainFilter;
     }
 }

@@ -12,4 +12,5 @@ public class KeycloakProperties {
     private String realm;
     private String client;
     private String secret;
+    private String issuer;
 }

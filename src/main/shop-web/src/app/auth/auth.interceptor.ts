@@ -6,9 +6,11 @@ import {
 import { catchError, switchMap, tap, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { inject } from '@angular/core';
+import { LoaderService } from '../loader.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
+  const loadingService = inject(LoaderService)
   const url = req.url;
 
   if (url.endsWith('/auth/token')) {

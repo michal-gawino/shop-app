@@ -1,0 +1,10 @@
+@if (isLoading()) {
+  <div class="container">
+    <div class="loader">
+      <ng-template #indicatorTemplate>
+        <nz-icon class="loader" nzType="loading" />
+      </ng-template>
+      <nz-spin nzSimple [nzIndicator]="indicatorTemplate"></nz-spin>
+    </div>
+  </div>
+}

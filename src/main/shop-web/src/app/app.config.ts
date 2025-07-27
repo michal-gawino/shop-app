@@ -14,7 +14,7 @@ import {
   MailOutline,
   UserAddOutline,
   UserOutline,
-  LeftOutline
+  LoadingOutline
 } from '@ant-design/icons-angular/icons';
 import { routes } from './app.routes';
 
@@ -27,6 +27,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
 import { AuthService } from './auth/auth.service';
 import { authInterceptor } from './auth/auth.interceptor';
+import { loadingInterceptor } from './loading.interceptor';
 
 registerLocaleData(en);
 
@@ -36,25 +37,18 @@ const icons: IconDefinition[] = [
   LockOutline,
   UserOutline,
   LogoutOutline,
-  MailOutline
+  MailOutline,
+  LoadingOutline
 ];
-
-function appInit(): void {
-  const authSerivce = inject(AuthService);
-  if(localStorage.getItem(authSerivce.AUTH_FLAG) != null){
-    authSerivce.setAuthenticated(true);
-  }
-}
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAppInitializer(appInit),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideNzIcons(icons),
     provideRouter(routes),
     provideNzI18n(en_US),
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, loadingInterceptor])),
   ],
 };

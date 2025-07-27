@@ -1,7 +1,7 @@
 <div class="header">
   <div class="logo" routerLink="/">ShopApp</div>
   <div class="items">
-    @if (!isAuthenticated) {
+    @if (currentUser == null) {
       <div class="item" routerLink="/login">
         <nz-icon nzType="login" nzTheme="outline" />
         Log in
@@ -19,24 +19,16 @@
         nz-dropdown
         [nzDropdownMenu]="profileMenu"
         nzTrigger="click"
-        (click)="getCurrentUser()"
       >
         <nz-avatar nzIcon="user"></nz-avatar>
         <nz-icon nzType="down" nzTheme="outline" />
       </div>
       <nz-dropdown-menu #profileMenu="nzDropdownMenu">
         <div class="profile-content">
-          @if (isLoading) {
-            <nz-spin
-              class="spinner"
-              nzTip="Loading..."
-              nzSize="large"
-            ></nz-spin>
-          } @else {
-            <div class="user-email">{{ currentUser?.email }}</div>
+            <div class="user-email">{{ currentUser.email }}</div>
             <div class="avatar">
               <nz-avatar nzIcon="user" nzSize="large"></nz-avatar> Hello
-              {{ currentUser?.name }}
+              {{ currentUser.name }}
             </div>
             <button
               class="log-out-button"
@@ -47,7 +39,6 @@
             >
               Log out
             </button>
-          }
         </div>
       </nz-dropdown-menu>
     }

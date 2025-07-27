@@ -18,32 +18,40 @@
     </div>
   </div>
   <div class="sub-container">
-    @if (!isLoaded) {
-      <div class="loader">
-        <nz-spin nzTip="Loading..." nzSize="large"></nz-spin>
-      </div>
-    } @else {
-      @let page = products!;
-      <div class="sidebar">
-        @for (facet of facets; track $index) {
-          <app-product-facet [facet]="facet" (selectedOptions)="selectedOptionsChanged($event)"></app-product-facet>
-        }
-      </div>
-      <div class="products-container">
-        @for (product of page.content; track product.id) {
-          <app-product [view]="productView" [product]="product"></app-product>
-        }
-        <div class="items-pagination">
-          <nz-pagination
-            [nzPageIndex]="page.number + 1"
-            [nzTotal]="page.totalElements"
-            [nzPageSize]="page.size"
-            nzShowSizeChanger
-            (nzPageIndexChange)="pageChanged($event)"
-            (nzPageSizeChange)="numberOfItemsChanged($event)"
-          ></nz-pagination>
+    @let page = products!;
+    <div class="sidebar">
+      @for (facet of facets; track $index) {
+        <app-product-facet
+          [facet]="facet"
+          (selectedOptions)="selectedOptionsChanged($event)"
+        ></app-product-facet>
+      }
+    </div>
+    @if (page) {
+      @if (page.content.length > 0) {
+        <div class="products-container">
+          @for (product of page?.content; track product.id) {
+            <app-product [view]="productView" [product]="product"></app-product>
+          }
+          <div class="items-pagination">
+            <nz-pagination
+              [nzPageIndex]="page.number + 1"
+              [nzTotal]="page.totalElements"
+              [nzPageSize]="page.size"
+              nzShowSizeChanger
+              (nzPageIndexChange)="pageChanged($event)"
+              (nzPageSizeChange)="numberOfItemsChanged($event)"
+            ></nz-pagination>
+          </div>
         </div>
-      </div>
+      } @else {
+        <div class="empty-page">
+          <nz-empty
+            nzNotFoundImage="simple"
+            nzNotFoundContent="No products found for specified criteria"
+          ></nz-empty>
+        </div>
+      }
     }
   </div>
 </div>
