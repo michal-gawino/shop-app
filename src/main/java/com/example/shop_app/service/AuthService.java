@@ -28,7 +28,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -84,7 +87,6 @@ public class AuthService {
             RoleRepresentation role = realm.clients().get(clientRep.getId()).roles().get("USER").toRepresentation();
             usersResource.get(user.getId()).roles().clientLevel(clientRep.getId()).add(Arrays.asList(role));
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
             throw new UserCreationException();
         }
 
@@ -126,7 +128,7 @@ public class AuthService {
 
     public Cookie createCookie(String name, String value, int maxAge) {
         Cookie c = new Cookie(name, value);
-        String path = name.equals(TOKEN_COOKIE) ? "/" : "/auth/refresh";
+        String path = "/";
         c.setMaxAge(maxAge);
         c.setHttpOnly(true);
         c.setSecure(true);
@@ -142,4 +144,13 @@ public class AuthService {
         response.addCookie(refreshTokenCookie);
     }
 
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        Optional.ofNullable(cookies).stream().flatMap(Arrays::stream).forEach(c -> {
+            c.setValue("");
+            c.setPath("/");
+            c.setMaxAge(0);
+            response.addCookie(c);
+        });
+    }
 }

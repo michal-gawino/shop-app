@@ -1,5 +1,5 @@
 import { Component, effect, inject, input } from '@angular/core';
-import { LoaderService } from '../loader.service';
+import { LoaderService } from '../loader/loader.service';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 

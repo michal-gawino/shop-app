@@ -11,9 +11,10 @@
         Register
       </div>
     } @else {
-      <div class="item" routerLink="/product">
-        Products
-      </div>
+      @if (isAdmin()) {
+        <div class="item" routerLink="/admin">Admin panel</div>
+      }
+      <div class="item" routerLink="/product">Products</div>
       <div
         class="item"
         nz-dropdown
@@ -25,20 +26,20 @@
       </div>
       <nz-dropdown-menu #profileMenu="nzDropdownMenu">
         <div class="profile-content">
-            <div class="user-email">{{ currentUser.email }}</div>
-            <div class="avatar">
-              <nz-avatar nzIcon="user" nzSize="large"></nz-avatar> Hello
-              {{ currentUser.name }}
-            </div>
-            <button
-              class="log-out-button"
-              nz-button
-              nzType="primary"
-              nzBlock
-              (click)="logout()"
-            >
-              Log out
-            </button>
+          <div class="user-email">{{ currentUser.email }}</div>
+          <div class="avatar">
+            <nz-avatar nzIcon="user" nzSize="large"></nz-avatar> Hello
+            {{ currentUser.name }}
+          </div>
+          <button
+            class="log-out-button"
+            nz-button
+            nzType="primary"
+            nzBlock
+            (click)="logout()"
+          >
+            Log out
+          </button>
         </div>
       </nz-dropdown-menu>
     }

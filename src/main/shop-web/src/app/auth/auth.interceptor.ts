@@ -6,11 +6,12 @@ import {
 import { catchError, switchMap, tap, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { inject } from '@angular/core';
-import { LoaderService } from '../loader.service';
+import { LoaderService } from '../loader/loader.service';
+import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const loadingService = inject(LoaderService)
+  const router = inject(Router);
   const url = req.url;
 
   if (url.endsWith('/auth/token')) {
@@ -25,7 +26,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             return next(req);
           }),
           catchError((err) => {
-            authService.logout();
+            authService.logout().subscribe({
+              next: (val) => {
+                authService.setCurrentUser(null);
+                router.navigate(['/login']);
+              },
+            });
             return throwError(() => err);
           }),
         );

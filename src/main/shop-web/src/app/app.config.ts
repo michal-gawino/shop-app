@@ -27,7 +27,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
 import { AuthService } from './auth/auth.service';
 import { authInterceptor } from './auth/auth.interceptor';
-import { loadingInterceptor } from './loading.interceptor';
+import { loadingInterceptor } from './loader/loading.interceptor';
 
 registerLocaleData(en);
 

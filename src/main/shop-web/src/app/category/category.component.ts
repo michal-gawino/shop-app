@@ -12,6 +12,6 @@ export class CategoryComponent {
   category = input.required<string>();
 
   selectCategory(category: string) {
-    console.log(category);
+    
   }
 }

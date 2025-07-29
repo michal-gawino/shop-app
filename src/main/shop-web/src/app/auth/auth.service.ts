@@ -4,7 +4,6 @@ import { LoginForm } from '../login/login-form';
 import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { User } from './user';
-import { Router } from '@angular/router';
 import { RegisterForm } from '../registration/register-form';
 
 @Injectable({
@@ -12,13 +11,10 @@ import { RegisterForm } from '../registration/register-form';
 })
 export class AuthService {
   private httpClient = inject(HttpClient);
-  private router = inject(Router);
 
   currentUser = signal<User | null>(null);
 
-  constructor() {
-    
-  }
+  constructor() {}
 
   login(loginForm: LoginForm): Observable<User> {
     return this.httpClient.post<User>(
@@ -30,9 +26,10 @@ export class AuthService {
     );
   }
 
-  logout() {
-    this.setCurrentUser(null);
-    this.router.navigate(['/login']);
+  logout(): Observable<void> {
+    return this.httpClient.post<void>(environment.apiUrl + '/auth/logout', null, {
+      withCredentials: true
+    });
   }
 
   refreshToken() {
@@ -59,10 +56,17 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.currentUser() != null;
+    return this.currentUser() !== null;
   }
 
   setCurrentUser(user: User | null) {
     this.currentUser.set(user);
+  }
+
+  hasPermission(requiredRoles: string[]): boolean {
+    const hasRole = this.currentUser()?.roles.find((r) =>
+      requiredRoles.includes(r),
+    );
+    return hasRole !== undefined;
   }
 }

@@ -3,7 +3,6 @@ import { inject } from '@angular/core';
 import { LoaderService } from './loader.service';
 import { finalize } from 'rxjs';
 
-
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const loaderService = inject(LoaderService);
   loaderService.show();

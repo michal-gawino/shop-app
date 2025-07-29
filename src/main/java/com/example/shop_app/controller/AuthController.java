@@ -35,4 +35,9 @@ public class AuthController {
     public void register(@RequestBody CreateUserRequest createUserRequest){
         authService.register(createUserRequest);
     }
+
+    @PostMapping("logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        authService.logout(request, response);
+    }
 }
