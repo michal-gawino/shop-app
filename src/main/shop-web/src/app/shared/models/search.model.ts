@@ -1,9 +1,15 @@
 import { Page } from './page';
 
-export interface FacetValue {
-  value: string,
-  range: Range,
-  count: number
+export class FacetValue {
+  value: string;
+  range: Range | null;
+  count: number | null
+
+  constructor(value: string, range: Range | null, count: number | null){
+    this.value = value;
+    this.range = range;
+    this.count = count;
+  }
 }
 
 export interface Range {
@@ -12,8 +18,8 @@ export interface Range {
 }
 
 export class Facet {
-  name!: string;
-  values!: Array<FacetValue>;
+  name: string;
+  values: Array<FacetValue>;
 
   constructor(name: string, values: Array<FacetValue>){
     this.name = name;

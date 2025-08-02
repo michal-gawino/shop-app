@@ -1,7 +1,4 @@
-import {
-  CommonModule,
-  NgOptimizedImage,
-} from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -28,7 +25,7 @@ import { Router } from '@angular/router';
     NzRateModule,
     NzPaginationModule,
     NzSpinModule,
-    NzCarouselModule
+    NzCarouselModule,
   ],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css',

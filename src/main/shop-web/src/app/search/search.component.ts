@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -10,7 +18,11 @@ import { ProductService } from './product.service';
 import { NzRateModule } from 'ng-zorro-antd/rate';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { PageRequest } from '../shared/models/page.request';
-import { Facet, SearchRequest } from '../shared/models/search.model';
+import {
+  Facet,
+  FacetValue,
+  SearchRequest,
+} from '../shared/models/search.model';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { ProductFacetComponent } from '../product-facet/product-facet.component';
 import { Product, ProductView } from '../shared/models/product.model';
@@ -18,6 +30,7 @@ import { ProductComponent } from '../product/product.component';
 import { Page } from '../shared/models/page';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -40,17 +53,33 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 })
 export class Searchomponent implements OnInit {
   private productService = inject(ProductService);
+  private router = inject(Router);
+
   inputQuery$ = new Subject<string>();
 
   products: Page<Product> | null = null;
   facets: Array<Facet> | null = null;
   pageRequest: PageRequest = { pageNumber: 0, size: 20 };
-  isLoaded: boolean = false;
   productView = ProductView.PAGED;
   facetMap = new Map<String, Facet>();
   searchRequest: SearchRequest = { query: '', facets: [] };
+  initFacet: Facet | null = null;
+
+  constructor() {
+    const navigation = this.router.getCurrentNavigation();
+    const categoryValue = navigation?.extras?.state?.data;
+    if (categoryValue !== undefined) {
+      this.initFacet = new Facet('Category', [
+        new FacetValue(categoryValue, null, null),
+      ]);
+    }
+  }
 
   ngOnInit(): void {
+    if (this.initFacet !== null) {
+      this.facetMap.set(this.initFacet.name, this.initFacet);
+      this.searchRequest.facets.push(this.initFacet);
+    }
     this.getProductsWithFacets(false);
     this.inputQuery$
       .pipe(debounceTime(500), distinctUntilChanged())
@@ -89,7 +118,6 @@ export class Searchomponent implements OnInit {
           this.facets = response.facets;
         }
         this.products = response.page;
-        this.isLoaded = true;
       },
     });
   }

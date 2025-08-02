@@ -23,6 +23,7 @@
       @for (facet of facets; track $index) {
         <app-product-facet
           [facet]="facet"
+          [initValue]="initFacet!"
           (selectedOptions)="selectedOptionsChanged($event)"
         ></app-product-facet>
       }

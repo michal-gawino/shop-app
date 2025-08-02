@@ -6,6 +6,7 @@ import com.example.shop_app.repository.ProductRepository;
 import com.example.shop_app.search.*;
 import com.example.shop_app.search.Range;
 import io.micrometer.common.util.StringUtils;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -53,11 +54,12 @@ public class ProductService {
         ProjectionOperation rangeProjection = project().and(Fields.UNDERSCORE_ID).as("range").andExclude(Fields.UNDERSCORE_ID).andInclude("count");
         SkipOperation skip = Aggregation.skip(pageable.getOffset());
         LimitOperation limit = limit(pageable.getPageSize());
+
         Criteria filers = createFilters(searchRequest);
         Query query = Query.query(filers);
         MatchOperation match = Aggregation.match(filers);
-        FacetOperation facetOperation = facet(unwind("tags"), group("tags"), projectionOperation).as("tags")
-                .and((group("category")), projectionOperation).as("categories")
+        FacetOperation facetOperation = facet(unwind("tags"), group("tags"), projectionOperation, sort(Sort.by("value"))).as("tags")
+                .and((group("category")),sort(Sort.by("category")),sort(Sort.by("value")), projectionOperation, sort(Sort.by("value"))).as("categories")
                 .and(bucketAuto("price", 4), rangeProjection).as("prices")
                 .and(bucketAuto("rating", 4), rangeProjection).as("ratings")
                 .and(match, sort(Sort.by("_id")), skip, limit).as("results");

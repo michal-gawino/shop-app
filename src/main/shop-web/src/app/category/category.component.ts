@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
@@ -9,9 +10,13 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
   styleUrl: './category.component.css',
 })
 export class CategoryComponent {
+  private router = inject(Router);
+
   category = input.required<string>();
 
   selectCategory(category: string) {
-    
+    this.router.navigate(['/product/'], {
+      state: { data: category },
+    });
   }
 }

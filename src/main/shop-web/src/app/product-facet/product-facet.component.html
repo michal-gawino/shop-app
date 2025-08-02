@@ -1,31 +1,31 @@
 <ul nz-menu nzMode="inline">
   @let facetValues = facet()!.values;
-    @if (facetValues.length > 0) {
-      <li nz-submenu nzTitle="{{ facet()!.name }}">
-        <ul class="search-filter">
-          @let singleValued = facetValues.at(0)?.value !== null;
-          <nz-checkbox-group
-            [(ngModel)]="options"
-            (ngModelChange)="onModelChange()"
-          >
-            <nz-list>
-              @for (item of facetValues; track $index) {
-                <nz-list-item>
-                  <label
-                    nz-checkbox
-                    [nzValue]="item"
-                  >
-                    @if (singleValued) {
-                      {{ item.value }}
-                    } @else {
-                      {{ item.range.min }} - {{ item.range.max }}
-                    }
-                  </label>
-                </nz-list-item>
-              }
-            </nz-list>
-          </nz-checkbox-group>
-        </ul>
-      </li>
-    }
+  @if (facetValues.length > 0) {
+    <li
+      nz-submenu
+      nzTitle="{{ facet()!.name }}"
+      [nzOpen]="initValue() != null && initValue()?.name === facet().name"
+    >
+      <ul class="search-filter">
+        <nz-checkbox-group
+          [(ngModel)]="options"
+          (ngModelChange)="onModelChange()"
+        >
+          <nz-list>
+            @for (item of facetValues; track $index) {
+              <nz-list-item>
+                <label #item nz-checkbox [nzValue]="item">
+                  @if (singleValued) {
+                    {{ item.value }}
+                  } @else {
+                    {{ item.range!.min }} - {{ item.range!.max! }}
+                  }
+                </label>
+              </nz-list-item>
+            }
+          </nz-list>
+        </nz-checkbox-group>
+      </ul>
+    </li>
+  }
 </ul>
