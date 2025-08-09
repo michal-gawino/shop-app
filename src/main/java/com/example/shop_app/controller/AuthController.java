@@ -22,7 +22,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("token")
-    public User setToken(@RequestBody TokenRequest tokenRequest, HttpServletResponse response) throws ParseException, InterruptedException {
+    public User login(@RequestBody TokenRequest tokenRequest, HttpServletResponse response) throws ParseException, InterruptedException {
         return authService.login(tokenRequest, response);
     }
 

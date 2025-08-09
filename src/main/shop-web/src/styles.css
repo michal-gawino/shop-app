@@ -16,4 +16,8 @@ nz-divider::before {
   align-content: center;
 }
 
+td.action {
+  font-size: large;
+}
+
 

@@ -14,7 +14,13 @@ import {
   MailOutline,
   UserAddOutline,
   UserOutline,
-  LoadingOutline
+  LoadingOutline,
+  ProductOutline,
+  UsergroupAddOutline,
+  DeleteTwoTone,
+  DeleteFill,
+  EditFill,
+  PlusOutline
 } from '@ant-design/icons-angular/icons';
 import { routes } from './app.routes';
 
@@ -38,7 +44,12 @@ const icons: IconDefinition[] = [
   UserOutline,
   LogoutOutline,
   MailOutline,
-  LoadingOutline
+  LoadingOutline,
+  ProductOutline,
+  UsergroupAddOutline,
+  DeleteFill,
+  EditFill,
+  PlusOutline
 ];
 
 export const appConfig: ApplicationConfig = {

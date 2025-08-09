@@ -4,12 +4,20 @@ import { environment } from '../../environments/environment';
 import { PageRequest } from '../shared/models/page.request';
 import { SearchRequest, SearchResponse } from '../shared/models/search.model';
 import { Product } from '../shared/models/product.model';
+import { Page } from '../shared/models/page';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
   private httpClient = inject(HttpClient);
+
+  findAll(pageRequest: PageRequest) {
+    return this.httpClient.get<Page<Product>>(environment.apiUrl + '/product', {
+      params: {page: pageRequest.pageNumber, size: pageRequest.size},
+      withCredentials: true,
+    });
+  }
 
   search(pageParams: PageRequest, request: SearchRequest) {
     return this.httpClient.post<SearchResponse<Product>>(

@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { User } from './user';
 import { RegisterForm } from '../registration/register-form';
+import { Role } from '../shared/models/role';
 
 @Injectable({
   providedIn: 'root',
@@ -27,9 +28,13 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.httpClient.post<void>(environment.apiUrl + '/auth/logout', null, {
-      withCredentials: true
-    });
+    return this.httpClient.post<void>(
+      environment.apiUrl + '/auth/logout',
+      null,
+      {
+        withCredentials: true,
+      },
+    );
   }
 
   refreshToken() {
@@ -50,7 +55,7 @@ export class AuthService {
   }
 
   getCurrentUser() {
-    return this.httpClient.get<User>(environment.apiUrl + '/user', {
+    return this.httpClient.get<User>(environment.apiUrl + '/user/current', {
       withCredentials: true,
     });
   }
@@ -63,7 +68,7 @@ export class AuthService {
     this.currentUser.set(user);
   }
 
-  hasPermission(requiredRoles: string[]): boolean {
+  hasPermission(requiredRoles: Role[]): boolean {
     const hasRole = this.currentUser()?.roles.find((r) =>
       requiredRoles.includes(r),
     );

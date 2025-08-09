@@ -35,14 +35,7 @@
             <app-product [view]="productView" [product]="product"></app-product>
           }
           <div class="items-pagination">
-            <nz-pagination
-              [nzPageIndex]="page.number + 1"
-              [nzTotal]="page.totalElements"
-              [nzPageSize]="page.size"
-              nzShowSizeChanger
-              (nzPageIndexChange)="pageChanged($event)"
-              (nzPageSizeChange)="numberOfItemsChanged($event)"
-            ></nz-pagination>
+            <app-pagination [page]="page" (pageRequestOutput)="refreshProducts($event)"></app-pagination>
           </div>
         </div>
       } @else {

@@ -1,6 +1,7 @@
 package com.example.shop_app.security;
 
 import com.example.shop_app.service.AuthService;
+import com.example.shop_app.service.CookieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,7 @@ import static com.example.shop_app.service.AuthService.TOKEN_COOKIE;
 public class SecurityConfig {
 
     @Autowired
-    private AuthService authService;
+    private CookieService cookieService;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,9 +41,9 @@ public class SecurityConfig {
                 .oauth2ResourceServer((oAuth2ResourceServerConfigurer) -> {
                     oAuth2ResourceServerConfigurer.bearerTokenResolver(bearerTokenResolver())
                             .jwt(jwt -> {
-                                jwt.jwtAuthenticationConverter(jwtAuthenticationConverter());
-                            }
-                    );
+                                        jwt.jwtAuthenticationConverter(jwtAuthenticationConverter());
+                                    }
+                            );
                 });
         return http.build();
     }
@@ -61,7 +62,7 @@ public class SecurityConfig {
 
     @Bean
     public BearerTokenResolver bearerTokenResolver() {
-        return request -> authService.getCookie(request, TOKEN_COOKIE);
+        return request -> cookieService.getCookie(request, TOKEN_COOKIE);
     }
 
     @Bean

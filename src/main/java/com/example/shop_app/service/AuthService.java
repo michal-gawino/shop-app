@@ -1,5 +1,6 @@
 package com.example.shop_app.service;
 
+import com.example.shop_app.UserRole;
 import com.example.shop_app.config.KeycloakProperties;
 import com.example.shop_app.exceptions.CannotRefreshTokenException;
 import com.example.shop_app.exceptions.UserCreationException;
@@ -14,11 +15,12 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.*;
 import org.keycloak.authorization.client.AuthzClient;
 import org.keycloak.representations.AccessTokenResponse;
-import org.keycloak.representations.idm.ClientRepresentation;
-import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.RoleRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
+import org.keycloak.representations.idm.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -28,10 +30,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService {
@@ -51,6 +51,9 @@ public class AuthService {
     @Autowired
     private KeycloakProperties keycloakProperties;
 
+    @Autowired
+    private CookieService cookieService;
+
     public User login(TokenRequest tokenRequest, HttpServletResponse response) throws ParseException, InterruptedException {
         AccessTokenResponse accessTokenResponse = authzClient.obtainAccessToken(tokenRequest.username(), tokenRequest.password());
         setCookies(response, accessTokenResponse);
@@ -59,7 +62,7 @@ public class AuthService {
     }
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        String cookie = getCookie(request, REFRESH_TOKEN_COOKIE);
+        String cookie = cookieService.getCookie(request, REFRESH_TOKEN_COOKIE);
         if (cookie != null) {
             try {
                 String tokenEndpoint = authzClient.getServerConfiguration().getTokenEndpoint();
@@ -73,24 +76,30 @@ public class AuthService {
         }
     }
 
+    private void setCookies(HttpServletResponse response, AccessTokenResponse tokenResponse) {
+        Cookie tokenCookie = cookieService.createCookie(TOKEN_COOKIE, tokenResponse.getToken(), (int) tokenResponse.getExpiresIn());
+        Cookie refreshTokenCookie = cookieService.createCookie(REFRESH_TOKEN_COOKIE, tokenResponse.getRefreshToken(), (int) tokenResponse.getRefreshExpiresIn());
+        response.addCookie(tokenCookie);
+        response.addCookie(refreshTokenCookie);
+    }
+
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Optional.ofNullable(request.getCookies()).stream().flatMap(Arrays::stream).forEach(c -> cookieService.expiryCookie(c, response));
+    }
+
     public void register(CreateUserRequest request) {
         RealmResource realm = adminClient.realm(keycloakProperties.getRealm());
-        UsersResource usersResource = realm.users();
         UserRepresentation userRepresentation = getUserRepresentation(request);
-
         try (Response response = realm.users().create(userRepresentation)) {
             if (response.getStatus() != HttpStatus.CREATED.value()) {
                 throw new UserCreationException();
             }
-            UserRepresentation user = realm.users().search(request.username()).get(0);
-            ClientRepresentation clientRep = realm.clients().findByClientId(keycloakProperties.getClient()).get(0);
-            RoleRepresentation role = realm.clients().get(clientRep.getId()).roles().get("USER").toRepresentation();
-            usersResource.get(user.getId()).roles().clientLevel(clientRep.getId()).add(Arrays.asList(role));
+            String[] locationParts = response.getLocation().toString().split("/");
+            String id = locationParts[locationParts.length - 1];
+            addRoles(id, List.of(UserRole.USER));
         } catch (Exception ex) {
             throw new UserCreationException();
         }
-
-
     }
 
     private UserRepresentation getUserRepresentation(CreateUserRequest request) {
@@ -110,47 +119,69 @@ public class AuthService {
     }
 
     public User getCurrentUser(Jwt token) {
-        String name = token.getClaimAsString("name");
+        String id = token.getClaimAsString("sub");
+        String firstName = token.getClaimAsString("given_name");
+        String lastName = token.getClaimAsString("family_name");
         String email = token.getClaimAsString("email");
-        List<String> roles = token.getClaimAsStringList("roles");
-        return new User(name, email, roles);
+        List<UserRole> roles = token.getClaimAsStringList("roles").stream().map(UserRole::valueOf).toList();
+        return new User(id, firstName, lastName, email, roles);
     }
 
-    public String getCookie(HttpServletRequest request, String cookieName) {
-        return Optional.ofNullable(request.getCookies())
-                .stream()
-                .flatMap(Arrays::stream)
-                .filter(c -> c.getName().equalsIgnoreCase(cookieName))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElse(null);
+    private List<UserRole> getUserRoles(String userId) {
+        RealmResource realmResource = adminClient.realm(keycloakProperties.getRealm());
+        Set<String> allRoles = Arrays.stream(UserRole.values()).map(Enum::name).collect(Collectors.toSet());
+        ClientRepresentation clientRep = realmResource.clients().findByClientId(keycloakProperties.getClient()).get(0);
+        List<RoleRepresentation> roleRepresentations = realmResource.users().get(userId).roles().clientLevel(clientRep.getId()).listAll();
+        return roleRepresentations.stream().filter(r -> allRoles.contains(r.getName())).map(r -> UserRole.valueOf(r.getName())).toList();
     }
 
-    public Cookie createCookie(String name, String value, int maxAge) {
-        Cookie c = new Cookie(name, value);
-        String path = "/";
-        c.setMaxAge(maxAge);
-        c.setHttpOnly(true);
-        c.setSecure(true);
-        c.setAttribute("SameSite", "Strict");
-        c.setPath(path);
-        return c;
+    public Page<User> findAllUsers(Pageable pageable) {
+        RealmResource realmResource = adminClient.realm(keycloakProperties.getRealm());
+        UsersResource usersResource = realmResource.users();
+        List<UserRepresentation> users = usersResource.list();
+        int total = users.size();
+        List<User> list = users.stream().map(u -> {
+                    List<UserRole> roles = getUserRoles(u.getId());
+                    return new User(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), roles);
+                }
+        ).toList();
+        return new PageImpl<>(list, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()), total);
     }
 
-    private void setCookies(HttpServletResponse response, AccessTokenResponse tokenResponse) {
-        Cookie tokenCookie = createCookie(TOKEN_COOKIE, tokenResponse.getToken(), (int) tokenResponse.getExpiresIn());
-        Cookie refreshTokenCookie = createCookie(REFRESH_TOKEN_COOKIE, tokenResponse.getRefreshToken(), (int) tokenResponse.getRefreshExpiresIn());
-        response.addCookie(tokenCookie);
-        response.addCookie(refreshTokenCookie);
+    public void deleteUser(String id) {
+        RealmResource realmResource = adminClient.realm(keycloakProperties.getRealm());
+        realmResource.users().get(id).remove();
     }
 
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies();
-        Optional.ofNullable(cookies).stream().flatMap(Arrays::stream).forEach(c -> {
-            c.setValue("");
-            c.setPath("/");
-            c.setMaxAge(0);
-            response.addCookie(c);
-        });
+    public User update(User user) {
+        String id = user.id();
+        RealmResource realmResource = adminClient.realm(keycloakProperties.getRealm());
+        UsersResource usersResource = realmResource.users();
+        UserRepresentation representation = usersResource.get(id).toRepresentation();
+        if (!representation.getFirstName().equals(user.firstName())) {
+            representation.setFirstName(user.firstName());
+        }
+        if (!representation.getLastName().equals(user.lastName())) {
+            representation.setLastName(user.lastName());
+        }
+        if (!representation.getEmail().equals(user.email())) {
+            representation.setEmail(user.email());
+        }
+        List<UserRole> currentRoles = getUserRoles(user.id());
+        List<UserRole> newRoles = user.roles();
+        List<UserRole> rolesToAdd = newRoles.stream().filter(r -> !currentRoles.contains(r)).toList();
+        if (!rolesToAdd.isEmpty()) {
+            addRoles(id, rolesToAdd);
+        }
+        usersResource.get(user.id()).update(representation);
+        return new User(id, representation.getFirstName(), representation.getLastName(), representation.getEmail(), newRoles);
+    }
+
+    void addRoles(String userId, List<UserRole> rolesToAdd) {
+        RealmResource realm = adminClient.realm(keycloakProperties.getRealm());
+        UsersResource usersResource = realm.users();
+        ClientRepresentation clientRep = realm.clients().findByClientId(keycloakProperties.getClient()).get(0);
+        List<RoleRepresentation> roles = rolesToAdd.stream().map(r -> realm.clients().get(clientRep.getId()).roles().get(r.name()).toRepresentation()).toList();
+        usersResource.get(userId).roles().clientLevel(clientRep.getId()).add(roles);
     }
 }

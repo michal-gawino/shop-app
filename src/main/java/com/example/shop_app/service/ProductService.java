@@ -5,16 +5,12 @@ import com.example.shop_app.entity.Product;
 import com.example.shop_app.repository.ProductRepository;
 import com.example.shop_app.search.*;
 import com.example.shop_app.search.Range;
-import io.micrometer.common.util.StringUtils;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.util.RegexFlags;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -114,5 +110,11 @@ public class ProductService {
         }
         Criteria mainFilter = Criteria.where("").andOperator(mainFilters);
         return mainFilter;
+    }
+
+    public Page<Product> findAll(Pageable pageable) {
+        SearchRequest searchRequest = new SearchRequest(null, List.of());
+        return search(searchRequest, pageable).page();
+
     }
 }

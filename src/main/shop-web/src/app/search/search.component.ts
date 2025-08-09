@@ -31,6 +31,7 @@ import { Page } from '../shared/models/page';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { Router } from '@angular/router';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 @Component({
   selector: 'app-search',
@@ -42,11 +43,11 @@ import { Router } from '@angular/router';
     NzButtonModule,
     NzCardModule,
     NzRateModule,
-    NzPaginationModule,
     NzSpinModule,
     ProductFacetComponent,
     ProductComponent,
     NzEmptyModule,
+    PaginationComponent,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css',
@@ -54,16 +55,14 @@ import { Router } from '@angular/router';
 export class Searchomponent implements OnInit {
   private productService = inject(ProductService);
   private router = inject(Router);
-
   inputQuery$ = new Subject<string>();
-
   products: Page<Product> | null = null;
   facets: Array<Facet> | null = null;
-  pageRequest: PageRequest = { pageNumber: 0, size: 20 };
   productView = ProductView.PAGED;
   facetMap = new Map<String, Facet>();
   searchRequest: SearchRequest = { query: '', facets: [] };
   initFacet: Facet | null = null;
+  pageRequest: PageRequest = { pageNumber: 0, size: 20 };
 
   constructor() {
     const navigation = this.router.getCurrentNavigation();
@@ -89,13 +88,8 @@ export class Searchomponent implements OnInit {
       });
   }
 
-  pageChanged(pageNumber: number) {
-    this.pageRequest.pageNumber = pageNumber - 1;
-    this.getProductsWithFacets(true);
-  }
-
-  numberOfItemsChanged(numberOfItems: number) {
-    this.pageRequest.size = numberOfItems;
+  refreshProducts(pageRequest: PageRequest) {
+    this.pageRequest = pageRequest;
     this.getProductsWithFacets(true);
   }
 

@@ -8,6 +8,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { User } from '../auth/user';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { Role } from '../shared/models/role';
 
 @Component({
   selector: 'app-header',
@@ -38,7 +39,7 @@ export class HeaderComponent {
   }
 
   isAdmin() {
-    return this.authService.hasPermission(['ADMIN']);
+    return this.authService.hasPermission([Role.ADMIN]);
   }
 
   logout() {

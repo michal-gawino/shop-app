@@ -8,6 +8,9 @@ import { authGuard } from './auth/auth.guard';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { Searchomponent } from './search/search.component';
 import { AdminComponent } from './admin/admin.component';
+import { AdminUsersComponent } from './admin-users/admin-users.component';
+import { AdminProductsComponent } from './admin-products/admin-products.component';
+import { Role } from './shared/models/role';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -17,26 +20,37 @@ export const routes: Routes = [
     pathMatch: 'full',
     component: HomeComponent,
     canActivate: [authGuard],
-    data: { roles: ['USER', 'ADMIN'] } 
+    data: { roles: [Role.USER, Role.ADMIN] } 
   },
   {
     path: 'product',
     pathMatch: 'full',
     component: Searchomponent,
     canActivate: [authGuard],
-    data: { roles: ['USER', 'ADMIN'] } 
+    data: { roles: [Role.USER, Role.ADMIN] },
   },
   {
     path: 'product/:id',
     component: ProductDetailsComponent,
     canActivate: [authGuard],
-    data: { roles: ['USER', 'ADMIN'] } 
+    data: { roles: [Role.USER, Role.ADMIN] } 
   },
     {
     path: 'admin',
     component: AdminComponent,
     canActivate: [authGuard],
-    data: { roles: ['ADMIN'] } 
+    data: { roles: [Role.ADMIN] },
+    children: [
+      {
+        path: 'users',
+        pathMatch: 'full',
+        component: AdminUsersComponent,
+      },
+      {
+        path: 'products',
+        component: AdminProductsComponent
+      }
+    ]
   },
   {
     path: '**',

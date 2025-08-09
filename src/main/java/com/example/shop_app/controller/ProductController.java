@@ -5,6 +5,7 @@ import com.example.shop_app.entity.Product;
 import com.example.shop_app.search.SearchResponse;
 import com.example.shop_app.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,11 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @GetMapping
+    public Page<Product> getAll(Pageable pageable) {
+        return productService.findAll(pageable);
+    }
 
     @GetMapping(path = "category")
     public List<String> getAllCategories() {

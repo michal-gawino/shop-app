@@ -2,10 +2,11 @@ import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { AuthService } from './auth.service';
 import { map, take } from 'rxjs';
+import { Role } from '../shared/models/role';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authSerivce = inject(AuthService);
-  const requiredRoles = route.data.roles as string[];
+  const requiredRoles = route.data.roles as Role[];
   if (authSerivce.isAuthenticated()) {
     return authSerivce.hasPermission(requiredRoles);
   } else {

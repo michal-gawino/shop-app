@@ -1,5 +1,9 @@
+import { Role } from "../shared/models/role";
+
 export interface User {
-    name: string;
+    id: string | null,
+    firstName: string;
+    lastName: string,
     email: string;
-    roles: string[];
+    roles: Role[];
 }
