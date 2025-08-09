@@ -1,0 +1,8 @@
+<nz-pagination
+  [nzPageIndex]="page()!.number + 1"
+  [nzTotal]="page()!.totalElements"
+  [nzPageSize]="page()!.size"
+  nzShowSizeChanger
+  (nzPageIndexChange)="pageChanged($event)"
+  (nzPageSizeChange)="numberOfItemsChanged($event)"
+></nz-pagination>

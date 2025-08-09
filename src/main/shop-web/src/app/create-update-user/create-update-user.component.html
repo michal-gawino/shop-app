@@ -1,0 +1,63 @@
+<div>
+  <div>
+    <form nz-form>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group>
+            <input
+              type="text"
+              nz-input
+              placeholder="First name"
+              name="firstName"
+              [(ngModel)]="user.firstName"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group>
+            <input
+              type="text"
+              nz-input
+              placeholder="Last name"
+              name="lastName"
+              [(ngModel)]="user.lastName"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group>
+            <input
+              type="text"
+              nz-input
+              placeholder="Email"
+              name="email"
+              [(ngModel)]="user.email"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <nz-input-group>
+            <nz-select
+              nzMode="multiple"
+              nzPlaceHolder="Roles"
+              name="roles"
+              [(ngModel)]="user.roles"
+            >
+              @for (item of roles; track item) {
+                <nz-option [nzLabel]="item" [nzValue]="item"></nz-option>
+              }
+            </nz-select>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>
