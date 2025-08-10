@@ -68,6 +68,10 @@ export class AuthService {
     this.currentUser.set(user);
   }
 
+  getCurrentUserValue(): User | null {
+    return this.currentUser();
+  }
+
   hasPermission(requiredRoles: Role[]): boolean {
     const hasRole = this.currentUser()?.roles.find((r) =>
       requiredRoles.includes(r),

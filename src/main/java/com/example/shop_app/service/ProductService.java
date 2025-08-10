@@ -2,6 +2,7 @@ package com.example.shop_app.service;
 
 import com.example.shop_app.dto.SearchRequest;
 import com.example.shop_app.entity.Product;
+import com.example.shop_app.exceptions.NotFoundException;
 import com.example.shop_app.repository.ProductRepository;
 import com.example.shop_app.search.*;
 import com.example.shop_app.search.Range;
@@ -26,6 +27,10 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    public Product getById(Long id) {
+        return productRepository.findById(id).orElseThrow(NotFoundException::new);
+    }
 
     public List<Product> saveAll(List<Product> products) {
         return productRepository.saveAll(products);
@@ -55,7 +60,7 @@ public class ProductService {
         Query query = Query.query(filers);
         MatchOperation match = Aggregation.match(filers);
         FacetOperation facetOperation = facet(unwind("tags"), group("tags"), projectionOperation, sort(Sort.by("value"))).as("tags")
-                .and((group("category")),sort(Sort.by("category")),sort(Sort.by("value")), projectionOperation, sort(Sort.by("value"))).as("categories")
+                .and((group("category")), sort(Sort.by("category")), sort(Sort.by("value")), projectionOperation, sort(Sort.by("value"))).as("categories")
                 .and(bucketAuto("price", 4), rangeProjection).as("prices")
                 .and(bucketAuto("rating", 4), rangeProjection).as("ratings")
                 .and(match, sort(Sort.by("_id")), skip, limit).as("results");

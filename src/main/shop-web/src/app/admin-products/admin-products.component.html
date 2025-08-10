@@ -1,1 +1,30 @@
-{{products}}
+@if (products) {
+  <nz-table
+    #table
+    [nzData]="products.content"
+    nzSize="middle"
+    nzFrontPagination="false"
+  >
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (data of table.data; track data) {
+        <tr>
+          <td>{{ data.title }}</td>
+          <td>{{ data.category }}</td>
+          <td>{{ data.price }}</td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+
+  <app-pagination
+    [page]="products"
+    (pageRequestOutput)="refreshProducts($event)"
+  ></app-pagination>
+}

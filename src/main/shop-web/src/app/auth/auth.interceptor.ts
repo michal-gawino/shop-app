@@ -1,17 +1,14 @@
-import {
-  HttpErrorResponse,
-  HttpEventType,
-  HttpInterceptorFn,
-} from '@angular/common/http';
-import { catchError, switchMap, tap, throwError } from 'rxjs';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { inject } from '@angular/core';
-import { LoaderService } from '../loader/loader.service';
 import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
+  const notificationService = inject(NzNotificationService);
   const url = req.url;
 
   if (url.endsWith('/auth/token')) {
@@ -34,6 +31,15 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             });
             return throwError(() => err);
           }),
+        );
+      } else if (err instanceof HttpErrorResponse && err.status === 500) {
+        notificationService.error(
+          'Internal server error',
+          'We encountered unexpected issue. Please contact support',
+          {
+            nzDuration: 2500,
+            nzPlacement: 'top',
+          },
         );
       }
       return throwError(() => err);

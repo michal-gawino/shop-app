@@ -19,6 +19,11 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @GetMapping("/{id}")
+    public Product findOne(@PathVariable("id") Long id) {
+        return productService.getById(id);
+    }
+
     @GetMapping
     public Page<Product> getAll(Pageable pageable) {
         return productService.findAll(pageable);

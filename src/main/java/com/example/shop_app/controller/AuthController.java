@@ -27,12 +27,12 @@ public class AuthController {
     }
 
     @PostMapping("refresh")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response){
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
         authService.refreshToken(request, response);
     }
 
     @PostMapping("register")
-    public void register(@RequestBody CreateUserRequest createUserRequest){
+    public void register(@RequestBody CreateUserRequest createUserRequest) {
         authService.register(createUserRequest);
     }
 

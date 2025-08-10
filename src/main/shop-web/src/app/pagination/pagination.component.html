@@ -3,6 +3,7 @@
   [nzTotal]="page()!.totalElements"
   [nzPageSize]="page()!.size"
   nzShowSizeChanger
+  nzSimple="false"
   (nzPageIndexChange)="pageChanged($event)"
   (nzPageSizeChange)="numberOfItemsChanged($event)"
 ></nz-pagination>

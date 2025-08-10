@@ -12,9 +12,15 @@ import { Page } from '../shared/models/page';
 export class ProductService {
   private httpClient = inject(HttpClient);
 
+  findOne(id: number) {
+    return this.httpClient.get<Product>(environment.apiUrl + '/product/' + id, {
+      withCredentials: true,
+    });
+  }
+
   findAll(pageRequest: PageRequest) {
     return this.httpClient.get<Page<Product>>(environment.apiUrl + '/product', {
-      params: {page: pageRequest.pageNumber, size: pageRequest.size},
+      params: { page: pageRequest.pageNumber, size: pageRequest.size },
       withCredentials: true,
     });
   }

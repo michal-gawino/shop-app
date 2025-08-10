@@ -1,85 +1,128 @@
-<div class="details-header">
-  <button nz-button nzType="primary" (click)="goBack()">
-    <nz-icon nzType="left" />
-    Go back
-  </button>
-</div>
-<div class="container">
-  <div class="product-image">
-    <nz-carousel nzAutoPlay nzEnableSwipe="false" nzDots="false">
-      @for (image of product.images; track $index) {
-        <div nz-carousel-content>
-          <img [ngSrc]="image" fill priority />
-        </div>
-      }
-    </nz-carousel>
+@if (product) {
+  <div class="details-header">
+    <button nz-button nzType="primary" (click)="goBack()">
+      <nz-icon nzType="left" />
+      Go back
+    </button>
   </div>
-
-  <div class="product-details">
-    <div class="product-rating">
-      <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf></nz-rate>
+  <div class="container">
+    <div class="product-image">
+      <nz-carousel nzAutoPlay nzEnableSwipe="false" nzDots="false">
+        @for (image of product.images; track $index) {
+          <div nz-carousel-content>
+            <img [ngSrc]="image" fill priority />
+          </div>
+        }
+      </nz-carousel>
     </div>
-    <h3>{{ product.title }} {{ product.price }} $</h3>
-    @if (product.brand) {
-      <h4>{{ product.brand }}</h4>
+
+    <div class="product-details">
+      <div class="product-rating">
+        <nz-rate [ngModel]="product.rating" nzDisabled nzAllowHalf></nz-rate>
+      </div>
+      <h3>{{ product.title }} {{ product.price }} $</h3>
+      @if (product.brand) {
+        <h4>{{ product.brand }}</h4>
+      }
+      {{ product.description }}
+
+      <div class="product-availability">
+        @switch (product.availabilityStatus) {
+          @case (ProductAvailability.IN_STOCK) {
+            <nz-progress
+              [nzPercent]="100"
+              [nzSteps]="3"
+              nzStrokeColor="green"
+              [nzShowInfo]="false"
+            ></nz-progress>
+          }
+          @case (ProductAvailability.LOW_STOCK) {
+            <nz-progress
+              [nzPercent]="67"
+              [nzSteps]="3"
+              nzStrokeColor="orange"
+              [nzShowInfo]="false"
+            ></nz-progress>
+          }
+          @case (ProductAvailability.OUT_OF_STOCK) {
+            <nz-progress
+              [nzPercent]="30"
+              [nzSteps]="3"
+              nzStrokeColor="red"
+              [nzShowInfo]="false"
+            ></nz-progress>
+          }
+        }
+
+        {{ product.availabilityStatus }}
+      </div>
+      <div class="product-tags">
+        @for (tag of product.tags; track $index) {
+          <nz-tag>
+            {{ tag }}
+          </nz-tag>
+        }
+      </div>
+    </div>
+  </div>
+  <nz-divider
+    nzPlain
+    nzText="Reviews"
+    nzOrientation="left"
+    nzVariant="solid"
+  ></nz-divider>
+  <div class="product-reviews">
+    @if (reviewExists === false) {
+      <nz-comment>
+        <nz-avatar nz-comment-avatar nzIcon="user"></nz-avatar>
+        <nz-comment-content>
+          <nz-rate #rate [(ngModel)]="review.rating" nzAllowHalf></nz-rate>
+
+          <nz-form-item>
+            <textarea
+              class="review-area"
+              [(ngModel)]="review.comment"
+              nz-input
+              rows="3"
+            >
+            </textarea>
+          </nz-form-item>
+          <nz-form-item>
+            <button
+              nz-button
+              nzType="primary"
+              [disabled]="review.comment.length === 0 || rate.nzValue === 0"
+              (click)="addReview()"
+            >
+              Add
+            </button>
+          </nz-form-item>
+        </nz-comment-content>
+      </nz-comment>
     }
-    {{ product.description }}
-
-    <div class="product-availability">
-      @switch (product.availabilityStatus) {
-        @case (ProductAvailability.IN_STOCK) {
-          <nz-progress
-            [nzPercent]="100"
-            [nzSteps]="3"
-            nzStrokeColor="green"
-            [nzShowInfo]="false"
-          ></nz-progress>
+    @for (review of product.reviews; track $index) {
+      <nz-comment
+        [nzAuthor]="review.name"
+        nzDatetime="{{ review.reviewDate | date: 'dd/MM/yyyy HH:mm:ss' }}"
+      >
+        <nz-comment-content>
+          {{ review.comment }}
+          <nz-rate [ngModel]="review.rating" nzDisabled nzAllowHalf></nz-rate>
+        </nz-comment-content>
+        @if (review.email === currentUser?.email) {
+          <nz-comment-action>
+            <button
+              nz-button
+              nzDanger
+              nzType="primary"
+              nzSize="small"
+              (click)="deleteReview()"
+            >
+              <nz-icon nzType="delete" nzTheme="fill" />
+            </button>
+          </nz-comment-action>
         }
-        @case (ProductAvailability.LOW_STOCK) {
-          <nz-progress
-            [nzPercent]="67"
-            [nzSteps]="3"
-            nzStrokeColor="orange"
-            [nzShowInfo]="false"
-          ></nz-progress>
-        }
-        @case (ProductAvailability.OUT_OF_STOCK) {
-          <nz-progress
-            [nzPercent]="30"
-            [nzSteps]="3"
-            nzStrokeColor="red"
-            [nzShowInfo]="false"
-          ></nz-progress>
-        }
-      }
-
-      {{ product.availabilityStatus }}
-    </div>
-    <div class="product-tags">
-      @for (tag of product.tags; track $index) {
-        <nz-tag>
-          {{ tag }}
-        </nz-tag>
-      }
-    </div>
+      </nz-comment>
+    }
   </div>
-</div>
-<nz-divider
-  nzPlain
-  nzText="Reviews"
-  nzOrientation="left"
-  nzVariant="solid"
-></nz-divider>
-<div class="product-reviews">
-  @for (review of product.reviews; track $index) {
-    <nz-comment
-      [nzAuthor]="review.name"
-      nzDatetime="{{ review.reviewDate | date: 'dd/MM/yyyy HH:mm:ss' }}"
-    >
-      <nz-comment-content>
-        {{ review.comment }}
-        <nz-rate [ngModel]="review.rating" nzDisabled nzAllowHalf></nz-rate>
-      </nz-comment-content>
-    </nz-comment>
-  }
-</div>
+}

@@ -20,10 +20,10 @@ export interface Product {
   images: Array<string>;
 }
 
-interface Review {
+export interface Review {
   rating: number;
   comment: string;
-  reviewDate: Date;
+  reviewDate?: Date;
   name: string;
   email: string;
 }

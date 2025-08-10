@@ -1,45 +1,56 @@
-<nz-table #table [nzData]="users.content" nzSize="middle" nzTableLayout="fixed">
-  <thead>
-    <tr>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Email</th>
-      <th>Roles</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (data of table.data; track data) {
+@if (users) {
+  <nz-table
+    #table
+    [nzData]="users.content"
+    nzSize="middle"
+    nzTableLayout="fixed"
+    nzFrontPagination="false"
+  >
+    <thead>
       <tr>
-        <td>{{ data.firstName }}</td>
-        <td>{{ data.lastName }}</td>
-        <td>{{ data.email }}</td>
-        <td>{{ data.roles }}</td>
-        @if (currentUser && currentUser.id !== data.id) {
-          <td class="action">
-            <button
-              nz-button
-              nzType="primary"
-              nzSize="small"
-              (click)="showCreateUpdateModal(data, false)"
-            >
-              <nz-icon nzType="edit" nzTheme="fill" />
-            </button>
-            <nz-divider nzType="vertical"></nz-divider>
-            <button
-              nz-button
-              nzDanger
-              nzType="primary"
-              nzSize="small"
-              (click)="showDeleteModal(data.id!)"
-            >
-              <nz-icon nzType="delete" nzTheme="fill" />
-            </button>
-          </td>
-        }
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th>Roles</th>
+        <th>Action</th>
       </tr>
-    }
-  </tbody>
-</nz-table>
+    </thead>
+    <tbody>
+      @for (data of table.data; track data) {
+        <tr>
+          <td>{{ data.firstName }}</td>
+          <td>{{ data.lastName }}</td>
+          <td>{{ data.email }}</td>
+          <td>{{ data.roles }}</td>
+          @if (currentUser && currentUser.id !== data.id) {
+            <td class="action">
+              <button
+                nz-button
+                nzType="primary"
+                nzSize="small"
+                (click)="showCreateUpdateModal(data, false)"
+              >
+                <nz-icon nzType="edit" nzTheme="fill" />
+              </button>
+              <nz-divider nzType="vertical"></nz-divider>
+              <button
+                nz-button
+                nzDanger
+                nzType="primary"
+                nzSize="small"
+                (click)="showDeleteModal(data.id!)"
+              >
+                <nz-icon nzType="delete" nzTheme="fill" />
+              </button>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </nz-table>
 
-<app-pagination [page]="users" (pageRequestOutput)="refreshView($event)"></app-pagination>
+  <app-pagination
+    [page]="users"
+    (pageRequestOutput)="refreshView($event)"
+  ></app-pagination>
+}
