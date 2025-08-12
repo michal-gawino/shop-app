@@ -54,6 +54,9 @@ public class AuthService {
     @Autowired
     private CookieService cookieService;
 
+    @Autowired
+    private FileService fileService;
+
     public User login(TokenRequest tokenRequest, HttpServletResponse response) throws ParseException, InterruptedException {
         AccessTokenResponse accessTokenResponse = authzClient.obtainAccessToken(tokenRequest.username(), tokenRequest.password());
         setCookies(response, accessTokenResponse);
@@ -124,7 +127,7 @@ public class AuthService {
         String lastName = token.getClaimAsString("family_name");
         String email = token.getClaimAsString("email");
         List<UserRole> roles = token.getClaimAsStringList("roles").stream().map(UserRole::valueOf).toList();
-        return new User(id, firstName, lastName, email, roles);
+        return new User(id, firstName, lastName, email, roles, fileService.getAvatar(id));
     }
 
     private List<UserRole> getUserRoles(String userId) {
@@ -142,7 +145,7 @@ public class AuthService {
         int total = users.size();
         List<User> list = users.stream().map(u -> {
                     List<UserRole> roles = getUserRoles(u.getId());
-                    return new User(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), roles);
+                    return new User(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), roles, null);
                 }
         ).toList();
         return new PageImpl<>(list, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()), total);
@@ -174,7 +177,7 @@ public class AuthService {
             addRoles(id, rolesToAdd);
         }
         usersResource.get(user.id()).update(representation);
-        return new User(id, representation.getFirstName(), representation.getLastName(), representation.getEmail(), newRoles);
+        return new User(id, representation.getFirstName(), representation.getLastName(), representation.getEmail(), newRoles, null);
     }
 
     void addRoles(String userId, List<UserRole> rolesToAdd) {

@@ -9,6 +9,10 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { User } from '../auth/user';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { Role } from '../shared/models/role';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { UploadAvatarComponent } from '../upload-avatar/upload-avatar.component';
 
 @Component({
   selector: 'app-header',
@@ -20,6 +24,9 @@ import { Role } from '../shared/models/role';
     NzDropDownModule,
     NzButtonModule,
     NzSpinModule,
+    NzUploadModule,
+    NzToolTipModule,
+    NzModalModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
@@ -28,9 +35,9 @@ import { Role } from '../shared/models/role';
 export class HeaderComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private modalService = inject(NzModalService)
 
   currentUser: User | null = null;
-  isLoading: boolean = false;
 
   constructor() {
     effect(() => {
@@ -50,4 +57,13 @@ export class HeaderComponent {
       },
     });
   }
+
+  openUploadModal() {
+    this.modalService.create({
+      nzTitle: 'Upload avatar',
+      nzContent: UploadAvatarComponent,
+      nzFooter: null
+    });
+  }
+
 }

@@ -1,0 +1,18 @@
+<div class="user-avatar">
+  @if (currentUser?.avatar) {
+    <img [src]="currentUser?.avatar" />
+  }
+  <nz-upload
+    [nzAction]="uploadUrl"
+    [nzShowUploadList]="false"
+    [nzHeaders]="headers"
+    nzFileType="image/png,image/jpeg,image/gif,image/bmp"
+    nzWithCredentials="true"
+    (nzChange)="handleAvatarChange($event)"
+  >
+    <button nz-button>
+      <nz-icon nzType="upload" />
+      Upload
+    </button>
+  </nz-upload>
+</div>

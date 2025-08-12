@@ -19,6 +19,7 @@ import { User } from '../auth/user';
 import { AuthService } from '../auth/auth.service';
 import { ReviewService } from '../review.service';
 import { ProductService } from '../search/product.service';
+import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
 
 @Component({
   selector: 'app-product-details',
@@ -37,6 +38,7 @@ import { ProductService } from '../search/product.service';
     NzProgressModule,
     NzFormModule,
     NzCommentModule,
+    NzAvatarComponent
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',

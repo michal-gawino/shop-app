@@ -74,7 +74,7 @@
   <div class="product-reviews">
     @if (reviewExists === false) {
       <nz-comment>
-        <nz-avatar nz-comment-avatar nzIcon="user"></nz-avatar>
+        <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="currentUser?.avatar"></nz-avatar>
         <nz-comment-content>
           <nz-rate #rate [(ngModel)]="review.rating" nzAllowHalf></nz-rate>
 

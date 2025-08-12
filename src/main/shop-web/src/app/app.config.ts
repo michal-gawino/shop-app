@@ -2,8 +2,6 @@ import {
   ApplicationConfig,
   provideZoneChangeDetection,
   importProvidersFrom,
-  provideAppInitializer,
-  inject,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { IconDefinition } from '@ant-design/icons-angular';
@@ -17,10 +15,12 @@ import {
   LoadingOutline,
   ProductOutline,
   UsergroupAddOutline,
-  DeleteTwoTone,
   DeleteFill,
   EditFill,
-  PlusOutline
+  PlusOutline,
+  PictureTwoTone,
+  DownloadOutline,
+  UploadOutline
 } from '@ant-design/icons-angular/icons';
 import { routes } from './app.routes';
 
@@ -48,7 +48,10 @@ const icons: IconDefinition[] = [
   UsergroupAddOutline,
   DeleteFill,
   EditFill,
-  PlusOutline
+  PlusOutline,
+  PictureTwoTone,
+  DownloadOutline,
+  UploadOutline
 ];
 
 export const appConfig: ApplicationConfig = {

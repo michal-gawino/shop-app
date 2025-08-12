@@ -70,6 +70,12 @@ nz-icon {
   gap: 1vw;
 }
 
+.upload-avatar{
+  &:hover {
+    color: #108ee9;
+  }
+}
+
 .log-out-button {
   height: 30%;
 }

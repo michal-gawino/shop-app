@@ -21,14 +21,14 @@
         [nzDropdownMenu]="profileMenu"
         nzTrigger="click"
       >
-        <nz-avatar nzIcon="user"></nz-avatar>
+        <nz-avatar nzIcon="user" [nzSrc]="currentUser.avatar"></nz-avatar>
         <nz-icon nzType="down" nzTheme="outline" />
       </div>
       <nz-dropdown-menu #profileMenu="nzDropdownMenu">
         <div class="profile-content">
           <div class="user-email">{{ currentUser.email }}</div>
           <div class="avatar">
-            <nz-avatar nzIcon="user" nzSize="large"></nz-avatar> Hello
+            <nz-avatar (click)="openUploadModal()" [nzSrc]="currentUser.avatar" nz-tooltip class="upload-avatar" nzIcon="user" nzSize="large" nzTooltipTitle="Upload avatar"></nz-avatar> Hello
             {{ currentUser.firstName }} {{ currentUser.lastName }}
           </div>
           <button
