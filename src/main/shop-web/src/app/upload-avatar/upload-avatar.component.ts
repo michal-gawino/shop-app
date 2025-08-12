@@ -43,7 +43,6 @@ export class UploadAvatarComponent implements OnInit {
 
   async uploadAvatar(file: File) {
     this.currentUser!.avatar = await this.getBase64(file)!;
-    console.log(this.currentUser?.avatar);
   }
 
   getBase64 = (file: File): Promise<string> =>
