@@ -4,7 +4,6 @@ import { LoginForm } from '../login/login-form';
 import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { User } from './user';
-import { RegisterForm } from '../registration/register-form';
 import { Role } from '../shared/models/role';
 
 @Injectable({
@@ -44,13 +43,6 @@ export class AuthService {
       {
         withCredentials: true,
       },
-    );
-  }
-
-  register(registerForm: RegisterForm): Observable<void> {
-    return this.httpClient.post<void>(
-      environment.apiUrl + '/auth/register',
-      registerForm,
     );
   }
 

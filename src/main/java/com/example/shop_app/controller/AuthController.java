@@ -1,6 +1,5 @@
 package com.example.shop_app.controller;
 
-import com.example.shop_app.dto.CreateUserRequest;
 import com.example.shop_app.dto.TokenRequest;
 import com.example.shop_app.dto.User;
 import com.example.shop_app.service.AuthService;
@@ -29,11 +28,6 @@ public class AuthController {
     @PostMapping("refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
         authService.refreshToken(request, response);
-    }
-
-    @PostMapping("register")
-    public void register(@RequestBody CreateUserRequest createUserRequest) {
-        authService.register(createUserRequest);
     }
 
     @PostMapping("logout")

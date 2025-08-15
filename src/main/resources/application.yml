@@ -11,13 +11,13 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://localhost/shop
+      uri: ${mongo.uri}
 
 upload:
   avatarFolder: ${avatars.location}
 
 keycloak:
-  uri: http://localhost:8080
+  uri: ${keycloak.uri}
   realm: shop-realm
   client: shop-client
   secret: InQc3I2ocqiqRVXPYNSwUCBmxoveDUQo

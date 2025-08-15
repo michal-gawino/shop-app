@@ -8,6 +8,7 @@ import { LoginForm } from './login-form';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { CartService } from '../cart/cart.service';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private cartService = inject(CartService)
 
   loginForm: LoginForm = { username: '', password: '' };
   displayErrorMessage = false;
@@ -43,6 +45,7 @@ export class LoginComponent {
       .subscribe({
         next: (res) => {
           this.authService.setCurrentUser(res);
+          this.cartService.init();
           this.router.navigate(['/home']);
         },
         error: (err) => {

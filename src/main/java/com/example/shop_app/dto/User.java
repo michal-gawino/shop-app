@@ -1,6 +1,6 @@
 package com.example.shop_app.dto;
 
-import com.example.shop_app.UserRole;
+import com.example.shop_app.enumeration.UserRole;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
 package com.example.shop_app.security;
 
-import com.example.shop_app.service.AuthService;
 import com.example.shop_app.service.CookieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

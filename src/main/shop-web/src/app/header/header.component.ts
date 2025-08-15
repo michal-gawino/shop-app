@@ -13,6 +13,9 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { UploadAvatarComponent } from '../upload-avatar/upload-avatar.component';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { Cart } from '../cart/cart';
+import { CartService } from '../cart/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +29,8 @@ import { UploadAvatarComponent } from '../upload-avatar/upload-avatar.component'
     NzSpinModule,
     NzUploadModule,
     NzToolTipModule,
-    NzModalModule
+    NzModalModule,
+    NzBadgeModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
@@ -34,14 +38,17 @@ import { UploadAvatarComponent } from '../upload-avatar/upload-avatar.component'
 })
 export class HeaderComponent {
   private authService = inject(AuthService);
+  private cartService = inject(CartService);
   private router = inject(Router);
-  private modalService = inject(NzModalService)
+  private modalService = inject(NzModalService);
 
   currentUser: User | null = null;
+  cart!: Cart;
 
   constructor() {
     effect(() => {
       this.currentUser = this.authService.currentUser();
+      this.cart = this.cartService.getCart();
     });
   }
 
@@ -62,8 +69,7 @@ export class HeaderComponent {
     this.modalService.create({
       nzTitle: 'Upload avatar',
       nzContent: UploadAvatarComponent,
-      nzFooter: null
+      nzFooter: null,
     });
   }
-
 }

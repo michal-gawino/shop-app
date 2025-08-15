@@ -14,6 +14,13 @@
       @if (isAdmin()) {
         <div class="item" routerLink="/admin">Admin panel</div>
       }
+      <div class="item" routerLink="/cart">
+        <nz-badge [nzCount]="cart.items.length" nzShowZero="true">
+          <nz-icon nzType="shopping-cart" nzTheme="outline" />
+          Cart
+        </nz-badge>
+      </div>
+
       <div class="item" routerLink="/product">Products</div>
       <div
         class="item"
@@ -28,8 +35,16 @@
         <div class="profile-content">
           <div class="user-email">{{ currentUser.email }}</div>
           <div class="avatar">
-            <nz-avatar (click)="openUploadModal()" [nzSrc]="currentUser.avatar" nz-tooltip class="upload-avatar" nzIcon="user" nzSize="large" nzTooltipTitle="Upload avatar"></nz-avatar> Hello
-            {{ currentUser.firstName }} {{ currentUser.lastName }}
+            <nz-avatar
+              (click)="openUploadModal()"
+              [nzSrc]="currentUser.avatar"
+              nz-tooltip
+              class="upload-avatar"
+              nzIcon="user"
+              nzSize="large"
+              nzTooltipTitle="Upload avatar"
+            ></nz-avatar>
+            Hello {{ currentUser.firstName }} {{ currentUser.lastName }}
           </div>
           <button
             class="log-out-button"

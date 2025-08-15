@@ -20,6 +20,7 @@ import { AuthService } from '../auth/auth.service';
 import { ReviewService } from '../review.service';
 import { ProductService } from '../search/product.service';
 import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
+import { CartService } from '../cart/cart.service';
 
 @Component({
   selector: 'app-product-details',
@@ -38,7 +39,7 @@ import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
     NzProgressModule,
     NzFormModule,
     NzCommentModule,
-    NzAvatarComponent
+    NzAvatarComponent,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',
@@ -49,6 +50,7 @@ export class ProductDetailsComponent implements OnInit {
   private productService = inject(ProductService);
   private navigationService = inject(NavigationService);
   private reviewService = inject(ReviewService);
+  private cartService = inject(CartService);
 
   ProductAvailability = ProductAvailability;
   product!: Product;
@@ -106,5 +108,24 @@ export class ProductDetailsComponent implements OnInit {
 
   goBack() {
     this.navigationService.goBack();
+  }
+
+  addToCart(product: Product) {
+    const item = this.cartService.getItem(product.id);
+    if (item !== undefined) {
+      this.cartService
+        .editItem({ product: product, quantity: item.quantity + 1 })
+        .subscribe({
+          next: () => {
+            this.cartService.changeItemQuantity(item, item.quantity + 1);
+          },
+        });
+    } else {
+      this.cartService.addToCart(product).subscribe({
+        next: (val) => {
+          this.cartService.addItemToCart(product);
+        },
+      });
+    }
   }
 }

@@ -11,6 +11,7 @@ import { AdminComponent } from './admin/admin.component';
 import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { AdminProductsComponent } from './admin-products/admin-products.component';
 import { Role } from './shared/models/role';
+import { CartComponent } from './cart/cart.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -20,7 +21,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     component: HomeComponent,
     canActivate: [authGuard],
-    data: { roles: [Role.USER, Role.ADMIN] } 
+    data: { roles: [Role.USER, Role.ADMIN] },
   },
   {
     path: 'product',
@@ -33,9 +34,9 @@ export const routes: Routes = [
     path: 'product/:id',
     component: ProductDetailsComponent,
     canActivate: [authGuard],
-    data: { roles: [Role.USER, Role.ADMIN] } 
+    data: { roles: [Role.USER, Role.ADMIN] },
   },
-    {
+  {
     path: 'admin',
     component: AdminComponent,
     canActivate: [authGuard],
@@ -48,14 +49,20 @@ export const routes: Routes = [
       },
       {
         path: 'products',
-        component: AdminProductsComponent
-      }
-    ]
+        component: AdminProductsComponent,
+      },
+    ],
+  },
+  {
+    path: 'cart',
+    component: CartComponent,
+    canActivate: [authGuard],
+    data: { roles: [Role.USER, Role.ADMIN] },
   },
   {
     path: '**',
     redirectTo: () => {
-      return "/";
-    }
+      return '/';
+    },
   },
 ];

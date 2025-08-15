@@ -63,6 +63,12 @@
           </nz-tag>
         }
       </div>
+      <div class="add-to-cart-button">
+        <button nz-button nzType="primary" (click)="addToCart(product)">
+          <nz-icon nzType="plus" />
+          Add to cart
+        </button>
+      </div>
     </div>
   </div>
   <nz-divider
@@ -74,7 +80,11 @@
   <div class="product-reviews">
     @if (reviewExists === false) {
       <nz-comment>
-        <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="currentUser?.avatar"></nz-avatar>
+        <nz-avatar
+          nz-comment-avatar
+          nzIcon="user"
+          [nzSrc]="currentUser?.avatar"
+        ></nz-avatar>
         <nz-comment-content>
           <nz-rate #rate [(ngModel)]="review.rating" nzAllowHalf></nz-rate>
 

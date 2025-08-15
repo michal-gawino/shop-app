@@ -18,7 +18,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class UploadAvatarComponent implements OnInit {
   private authService = inject(AuthService);
-  uploadUrl = environment.apiUrl + '/user/avatar';
+  uploadUrl = environment.apiUrl + '/profile/avatar';
   headers!: {};
   currentUser!: User | null;
 

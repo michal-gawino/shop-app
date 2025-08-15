@@ -41,6 +41,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             nzPlacement: 'top',
           },
         );
+      } else if (err instanceof HttpErrorResponse && err.status === 0) {
+        router.navigate(['/login']);
       }
       return throwError(() => err);
     }),
