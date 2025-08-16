@@ -1,5 +1,6 @@
 package com.example.shop_app.service;
 
+import com.example.shop_app.dto.User;
 import com.example.shop_app.entity.Cart;
 import com.example.shop_app.entity.CartItem;
 import com.mongodb.client.result.UpdateResult;
@@ -58,10 +59,12 @@ public class CartService {
     }
 
     public void clear() {
-        String currentUserId = userService.getCurrentUser().id();
-        Criteria criteria = Criteria.where("userId").is(currentUserId);
-        Query query = Query.query(criteria);
-        mongoTemplate.findAndRemove(query, Cart.class);
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            Criteria criteria = Criteria.where("userId").is(currentUser.id());
+            Query query = Query.query(criteria);
+            mongoTemplate.findAndRemove(query, Cart.class);
+        }
     }
 
     boolean productExistsInCart(String userId, Long productId) {

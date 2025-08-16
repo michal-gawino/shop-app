@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { LoginForm } from '../login/login-form';
 import { environment } from '../../environments/environment.development';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { User } from './user';
 import { Role } from '../shared/models/role';
 
@@ -27,13 +27,10 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.httpClient.post<void>(
-      environment.apiUrl + '/auth/logout',
-      null,
-      {
+    return this.httpClient
+      .post<void>(environment.apiUrl + '/auth/logout', null, {
         withCredentials: true,
-      },
-    );
+      });
   }
 
   refreshToken() {

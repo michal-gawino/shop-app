@@ -113,7 +113,7 @@ public class UserService {
 
     public User getCurrentUser(){
         Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
-        return convertTokenToUser((Jwt) credentials);
+        return credentials != null ? convertTokenToUser((Jwt) credentials) : null;
     }
 
     private List<UserRole> getUserRoles(String userId) {

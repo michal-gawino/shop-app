@@ -70,7 +70,7 @@ export class CartService {
     return this.cart().getItem(id);
   }
 
-    changeItemQuantity(item: CartItem, quantity: number) {
-      this.cart().changeItemQuantity(item, quantity)
+  changeItemQuantity(item: CartItem, quantity: number) {
+    this.cart().changeItemQuantity(item, quantity);
   }
 }

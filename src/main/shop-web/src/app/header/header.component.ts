@@ -59,6 +59,7 @@ export class HeaderComponent {
   logout() {
     this.authService.logout().subscribe({
       next: () => {
+        console.log('test logout');
         this.authService.setCurrentUser(null);
         this.router.navigate(['/login']);
       },
