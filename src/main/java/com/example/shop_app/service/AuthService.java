@@ -4,17 +4,21 @@ import com.example.shop_app.config.KeycloakProperties;
 import com.example.shop_app.exceptions.CannotRefreshTokenException;
 import com.example.shop_app.dto.TokenRequest;
 import com.example.shop_app.dto.User;
+import com.example.shop_app.exceptions.LoginException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.keycloak.authorization.client.AuthzClient;
+import org.keycloak.authorization.client.util.HttpResponseException;
 import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.client.RestClient;
 
 import java.text.ParseException;
@@ -48,8 +52,16 @@ public class AuthService {
     private UserService userService;
 
     public User login(TokenRequest tokenRequest, HttpServletResponse response) throws ParseException, InterruptedException {
-        AccessTokenResponse accessTokenResponse = authzClient.obtainAccessToken(tokenRequest.username(), tokenRequest.password());
+        AccessTokenResponse accessTokenResponse;
+        try {
+            accessTokenResponse = authzClient.obtainAccessToken(tokenRequest.username(), tokenRequest.password());
+        } catch (Exception ex) {
+            HttpResponseException httpResponseException = (HttpResponseException) ex;
+            String message = httpResponseException.getStatusCode() == HttpStatus.UNAUTHORIZED.value() ? "Invalid user credentials" : "Error during login";
+            throw new LoginException(message);
+        }
         setCookies(response, accessTokenResponse);
+        ErrorResponse response1;
         Jwt token = JwtDecoders.fromIssuerLocation(keycloakProperties.getIssuer()).decode(accessTokenResponse.getToken());
         return userService.convertTokenToUser(token);
     }

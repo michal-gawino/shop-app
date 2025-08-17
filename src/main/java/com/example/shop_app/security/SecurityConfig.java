@@ -32,7 +32,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> {
                     requests.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                            .requestMatchers("/", "/auth/**", "/error").permitAll()
+                            .requestMatchers("/auth/**", "/error", "/user/register").permitAll()
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

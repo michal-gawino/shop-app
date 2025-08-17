@@ -1,10 +1,6 @@
-@if (products) {
-  <nz-table
-    #table
-    [nzData]="products.content"
-    nzSize="middle"
-    nzFrontPagination="false"
-  >
+@let data = products$ | async;
+@if (data) {
+  <nz-table #table [nzData]="data" nzTableLayout="fixed" nzShowSizeChanger="true" [nzTotal]="data.length" nzSize="middle">
     <thead>
       <tr>
         <th>Title</th>
@@ -22,9 +18,4 @@
       }
     </tbody>
   </nz-table>
-
-  <app-pagination
-    [page]="products"
-    (pageRequestOutput)="refreshProducts($event)"
-  ></app-pagination>
 }

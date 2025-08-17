@@ -26,15 +26,12 @@ import { CartService } from '../cart/cart.service';
 export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
-  private cartService = inject(CartService)
+  private cartService = inject(CartService);
 
   loginForm: LoginForm = { username: '', password: '' };
-  displayErrorMessage = false;
-  accountCreated = false;
+  error!: string;
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
   login() {
     this.authService
@@ -48,8 +45,8 @@ export class LoginComponent {
           this.cartService.init();
           this.router.navigate(['/home']);
         },
-        error: (err) => {
-          this.displayErrorMessage = true;
+        error: (response) => {
+          this.error = response.error.detail;
         },
       });
   }

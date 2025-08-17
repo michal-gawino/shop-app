@@ -1,10 +1,14 @@
-@if (users) {
+@let data = users$ | async;
+
+@if (data) {
   <nz-table
     #table
-    [nzData]="users.content"
+    [nzData]="data"
     nzSize="middle"
     nzTableLayout="fixed"
-    nzFrontPagination="false"
+    [nzTotal]="data.length"
+    nzShowSizeChanger="true"
+    [nzPageSizeOptions]="[5, 10, 20, 30, 40]"
   >
     <thead>
       <tr>
@@ -48,9 +52,4 @@
       }
     </tbody>
   </nz-table>
-
-  <app-pagination
-    [page]="users"
-    (pageRequestOutput)="refreshView($event)"
-  ></app-pagination>
 }

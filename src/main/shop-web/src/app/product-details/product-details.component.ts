@@ -1,8 +1,8 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
-import { DatePipe, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, DatePipe, NgOptimizedImage } from '@angular/common';
 import { NzRateModule } from 'ng-zorro-antd/rate';
 import { FormsModule } from '@angular/forms';
 import { NzTagModule } from 'ng-zorro-antd/tag';
@@ -21,6 +21,15 @@ import { ReviewService } from '../review.service';
 import { ProductService } from '../search/product.service';
 import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
 import { CartService } from '../cart/cart.service';
+import {
+  catchError,
+  Observable,
+  of,
+  startWith,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
@@ -40,11 +49,12 @@ import { CartService } from '../cart/cart.service';
     NzFormModule,
     NzCommentModule,
     NzAvatarComponent,
+    AsyncPipe,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',
 })
-export class ProductDetailsComponent implements OnInit {
+export class ProductDetailsComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
   private productService = inject(ProductService);
@@ -53,56 +63,61 @@ export class ProductDetailsComponent implements OnInit {
   private cartService = inject(CartService);
 
   ProductAvailability = ProductAvailability;
-  product!: Product;
+  id!: number;
+  refreshSubject$ = new Subject<void>();
+  product$!: Observable<Product | null>;
   review!: Review;
   currentUser!: User | null;
   reviewExists: boolean = false;
+  productExists!: boolean;
 
   ngOnInit(): void {
-    const productId = this.route.snapshot.params.id as number;
-    this.loadProduct(productId);
-    this.clearReview();
+    this.id = this.route.snapshot.params.id;
+    this.product$ = this.refreshSubject$.pipe(
+      startWith(void 0),
+      switchMap(() =>
+        this.productService.findOne(this.id).pipe(
+          tap((product) => {
+            this.clearReview();
+            this.reviewExists =
+              product.reviews.find(
+                (r) => r.email === this.currentUser!.email,
+              ) !== undefined;
+          }),
+          catchError((err) => {
+            this.productExists = false;
+            return of(null);
+          }),
+        ),
+      ),
+    );
     this.currentUser = this.authService.getCurrentUserValue();
   }
 
-  loadProduct(productId: number) {
-    this.productService.findOne(productId).subscribe({
-      next: (product) => {
-        this.product = product;
-        this.reviewExists =
-          this.product.reviews.find(
-            (r) => r.email === this.currentUser!.email,
-          ) !== undefined;
-      },
-    });
-  }
-
   addReview() {
-    this.review.reviewDate = new Date();
-    this.review.email = this.currentUser!.email;
-    this.review.name = this.currentUser!.firstName.concat(
-      ' ',
-      this.currentUser!.lastName,
-    );
-    this.reviewService.add(this.product.id, this.review).subscribe({
+    this.review = {
+      reviewDate: new Date(),
+      email: this.currentUser!.email,
+      name: this.currentUser!.firstName.concat(' ', this.currentUser!.lastName),
+      rating: this.review.rating,
+      comment: this.review.comment,
+    };
+    this.reviewService.add(this.id, this.review).subscribe({
       next: () => {
-        this.reviewExists = true;
-        this.product.reviews.push(this.review);
+        this.refreshSubject$.next();
       },
     });
   }
 
   deleteReview() {
-    this.reviewService.delete(this.product.id).subscribe({
+    this.reviewService.delete(this.id).subscribe({
       next: () => {
-        this.loadProduct(this.product.id);
-        this.clearReview();
+        this.refreshSubject$.next();
       },
     });
   }
 
   clearReview() {
-    this.reviewExists = false;
     this.review = { rating: 0, comment: '', email: '', name: '' };
   }
 
@@ -127,5 +142,10 @@ export class ProductDetailsComponent implements OnInit {
         },
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.refreshSubject$.next()
+    this.refreshSubject$.complete();
   }
 }

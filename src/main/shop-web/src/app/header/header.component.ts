@@ -39,7 +39,6 @@ import { CartService } from '../cart/cart.service';
 export class HeaderComponent {
   private authService = inject(AuthService);
   private cartService = inject(CartService);
-  private router = inject(Router);
   private modalService = inject(NzModalService);
 
   currentUser: User | null = null;
@@ -59,9 +58,7 @@ export class HeaderComponent {
   logout() {
     this.authService.logout().subscribe({
       next: () => {
-        console.log('test logout');
-        this.authService.setCurrentUser(null);
-        this.router.navigate(['/login']);
+        this.authService.logoutUser();
       },
     });
   }

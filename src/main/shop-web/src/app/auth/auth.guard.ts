@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { AuthService } from './auth.service';
-import { map, take } from 'rxjs';
+import { map } from 'rxjs';
 import { Role } from '../shared/models/role';
 
 export const authGuard: CanActivateFn = (route, state) => {
@@ -11,7 +11,6 @@ export const authGuard: CanActivateFn = (route, state) => {
     return authSerivce.hasPermission(requiredRoles);
   } else {
     return authSerivce.getCurrentUser().pipe(
-      take(1),
       map((user) => {
         authSerivce.setCurrentUser(user);
         return authSerivce.hasPermission(requiredRoles);

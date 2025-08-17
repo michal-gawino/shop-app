@@ -5,6 +5,7 @@ import com.example.shop_app.dto.CreateUserRequest;
 import com.example.shop_app.dto.User;
 import com.example.shop_app.enumeration.UserRole;
 import com.example.shop_app.exceptions.UserCreationException;
+import com.google.common.collect.Sets;
 import jakarta.ws.rs.core.Response;
 import org.apache.commons.codec.binary.Base64;
 import org.keycloak.admin.client.Keycloak;
@@ -15,10 +16,6 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -29,6 +26,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -55,7 +53,7 @@ public class UserService {
             }
             String[] locationParts = response.getLocation().toString().split("/");
             String id = locationParts[locationParts.length - 1];
-            addRoles(id, List.of(UserRole.USER));
+            setRoles(id, Set.of(UserRole.USER), Set.of());
         } catch (Exception ex) {
             throw new UserCreationException();
         }
@@ -75,22 +73,21 @@ public class UserService {
         if (!representation.getEmail().equals(user.email())) {
             representation.setEmail(user.email());
         }
-        List<UserRole> currentRoles = getUserRoles(user.id());
-        List<UserRole> newRoles = user.roles();
-        List<UserRole> rolesToAdd = newRoles.stream().filter(r -> !currentRoles.contains(r)).toList();
-        if (!rolesToAdd.isEmpty()) {
-            addRoles(id, rolesToAdd);
-        }
+        HashSet<UserRole> currentRoles = new HashSet<>(getUserRoles(user.id()));
+        HashSet<UserRole> targetRoles = new HashSet<>(user.roles());
+        setRoles(id, Sets.difference(targetRoles, currentRoles), Sets.difference(currentRoles, targetRoles));
         usersResource.get(user.id()).update(representation);
-        return new User(id, representation.getFirstName(), representation.getLastName(), representation.getEmail(), newRoles, null);
+        return new User(id, representation.getFirstName(), representation.getLastName(), representation.getEmail(), targetRoles.stream().toList(), null);
     }
 
-    private void addRoles(String userId, List<UserRole> rolesToAdd) {
+    private void setRoles(String userId, Set<UserRole> rolesToAdd,  Set<UserRole> rolesToRemove) {
         RealmResource realm = adminClient.realm(keycloakProperties.getRealm());
         UsersResource usersResource = realm.users();
         ClientRepresentation clientRep = realm.clients().findByClientId(keycloakProperties.getClient()).get(0);
-        List<RoleRepresentation> roles = rolesToAdd.stream().map(r -> realm.clients().get(clientRep.getId()).roles().get(r.name()).toRepresentation()).toList();
-        usersResource.get(userId).roles().clientLevel(clientRep.getId()).add(roles);
+        List<RoleRepresentation> newRoles = rolesToAdd.stream().map(r -> realm.clients().get(clientRep.getId()).roles().get(r.name()).toRepresentation()).toList();
+        List<RoleRepresentation> rolesToDelete = rolesToRemove.stream().map(r -> realm.clients().get(clientRep.getId()).roles().get(r.name()).toRepresentation()).toList();
+        usersResource.get(userId).roles().clientLevel(clientRep.getId()).add(newRoles);
+        usersResource.get(userId).roles().clientLevel(clientRep.getId()).remove(rolesToDelete);
     }
 
     public void deleteUser(String id) {
@@ -98,22 +95,20 @@ public class UserService {
         realmResource.users().get(id).remove();
     }
 
-    public Page<User> findAllUsers(Pageable pageable) {
+    public List<User> findAllUsers() {
         RealmResource realmResource = adminClient.realm(keycloakProperties.getRealm());
         UsersResource usersResource = realmResource.users();
         List<UserRepresentation> users = usersResource.list();
-        int total = users.size();
-        List<User> list = users.stream().map(u -> {
+        return users.stream().map(u -> {
                     List<UserRole> roles = getUserRoles(u.getId());
                     return new User(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), roles, null);
                 }
         ).toList();
-        return new PageImpl<>(list, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()), total);
     }
 
-    public User getCurrentUser(){
+    public User getCurrentUser() {
         Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
-        return credentials != null ? convertTokenToUser((Jwt) credentials) : null;
+        return credentials != null && !String.valueOf(credentials).isEmpty() ? convertTokenToUser((Jwt) credentials) : null;
     }
 
     private List<UserRole> getUserRoles(String userId) {

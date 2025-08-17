@@ -1,3 +1,9 @@
+@let product = product$ | async;
+
+@if (productExists === false) {
+  <h2>Product not found</h2>
+}
+
 @if (product) {
   <div class="details-header">
     <button nz-button nzType="primary" (click)="goBack()">

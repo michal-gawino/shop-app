@@ -38,10 +38,10 @@
       >
         Log in
       </button>
-      @if (displayErrorMessage) {
+      @if (error) {
         <nz-alert
           nzType="error"
-          nzMessage="Invalid credentials. Please try again"
+          [nzMessage]="error"
         ></nz-alert>
       }
     </form>

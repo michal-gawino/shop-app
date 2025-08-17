@@ -9,18 +9,19 @@ import { Review } from './shared/models/product.model';
 })
 export class ReviewService {
   private httpclient = inject(HttpClient);
+  private readonly REVIEW_ENDPOINT = environment.apiUrl + '/review';
 
   constructor() {}
 
   add(productId: number, review: Review): Observable<void> {
-    return this.httpclient.post<void>(environment.apiUrl + '/review', review, {
+    return this.httpclient.post<void>(this.REVIEW_ENDPOINT, review, {
       params: { productId: productId },
       withCredentials: true,
     });
   }
 
   delete(productId: number): Observable<void> {
-    return this.httpclient.delete<void>(environment.apiUrl + '/review', {
+    return this.httpclient.delete<void>(this.REVIEW_ENDPOINT, {
       params: { productId: productId },
       withCredentials: true,
     });

@@ -11,6 +11,7 @@ import { Product } from '../shared/models/product.model';
 export class CartService {
   private httpClient = inject(HttpClient);
   private readonly EMPTY_CART = new Cart([]);
+  private readonly CART_ENDPOINT = environment.apiUrl + '/cart';
 
   cart = signal<Cart>(this.EMPTY_CART);
 
@@ -28,14 +29,14 @@ export class CartService {
   }
 
   getUserCart(): Observable<Cart> {
-    return this.httpClient.get<Cart>(environment.apiUrl + '/cart', {
+    return this.httpClient.get<Cart>(this.CART_ENDPOINT, {
       withCredentials: true,
     });
   }
 
   addToCart(product: Product): Observable<void> {
     return this.httpClient.post<void>(
-      environment.apiUrl + '/cart/add',
+      this.CART_ENDPOINT + '/add',
       product,
       {
         withCredentials: true,
@@ -45,7 +46,7 @@ export class CartService {
 
   removeFromCart(product: Product): Observable<void> {
     return this.httpClient.delete<void>(
-      environment.apiUrl + '/cart/remove/' + product.id,
+      this.CART_ENDPOINT + '/remove/' + product.id,
       {
         withCredentials: true,
       },
@@ -53,7 +54,7 @@ export class CartService {
   }
 
   editItem(item: CartItem): Observable<void> {
-    return this.httpClient.put<void>(environment.apiUrl + '/cart/edit', item, {
+    return this.httpClient.put<void>(this.CART_ENDPOINT +'/edit', item, {
       withCredentials: true,
     });
   }

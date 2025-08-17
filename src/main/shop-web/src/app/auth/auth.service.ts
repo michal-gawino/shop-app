@@ -5,12 +5,15 @@ import { environment } from '../../environments/environment.development';
 import { Observable, tap } from 'rxjs';
 import { User } from './user';
 import { Role } from '../shared/models/role';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private httpClient = inject(HttpClient);
+  private router = inject(Router);
+  private readonly AUTH_ENDPOINT = environment.apiUrl + '/auth';
 
   currentUser = signal<User | null>(null);
 
@@ -18,7 +21,7 @@ export class AuthService {
 
   login(loginForm: LoginForm): Observable<User> {
     return this.httpClient.post<User>(
-      environment.apiUrl + '/auth/token',
+      this.AUTH_ENDPOINT + '/token',
       loginForm,
       {
         withCredentials: true,
@@ -27,20 +30,15 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.httpClient
-      .post<void>(environment.apiUrl + '/auth/logout', null, {
-        withCredentials: true,
-      });
+    return this.httpClient.post<void>(this.AUTH_ENDPOINT + '/logout', null, {
+      withCredentials: true,
+    });
   }
 
   refreshToken() {
-    return this.httpClient.post<void>(
-      environment.apiUrl + '/auth/refresh',
-      null,
-      {
-        withCredentials: true,
-      },
-    );
+    return this.httpClient.post<void>(this.AUTH_ENDPOINT + '/refresh', null, {
+      withCredentials: true,
+    });
   }
 
   getCurrentUser() {
@@ -66,5 +64,10 @@ export class AuthService {
       requiredRoles.includes(r),
     );
     return hasRole !== undefined;
+  }
+
+  logoutUser(): void {
+    this.setCurrentUser(null);
+    this.router.navigate(['/login']);
   }
 }

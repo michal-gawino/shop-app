@@ -1,4 +1,11 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { UserService } from '../user.service';
 import { User } from '../auth/user';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -8,9 +15,9 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { CreateUpdateUserComponent } from '../create-update-user/create-update-user.component';
 import { AuthService } from '../auth/auth.service';
-import { PaginationComponent } from '../pagination/pagination.component';
-import { Page } from '../shared/models/page';
 import { PageRequest } from '../shared/models/page.request';
+import { AsyncPipe } from '@angular/common';
+import { startWith, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-admin-users',
@@ -20,20 +27,24 @@ import { PageRequest } from '../shared/models/page.request';
     NzDividerComponent,
     NzButtonModule,
     NzModalModule,
-    PaginationComponent,
+    AsyncPipe,
   ],
   templateUrl: './admin-users.component.html',
   styleUrl: './admin-users.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminUsersComponent implements OnInit {
+export class AdminUsersComponent implements OnInit, OnDestroy {
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private modalService = inject(NzModalService);
 
-  users!: Page<User>;
   currentUser!: User | null;
   formUser!: User;
-  pageRequest: PageRequest = { pageNumber: 0, size: 20 };
+  refreshSubject$ = new Subject<void>();
+  users$ = this.refreshSubject$.pipe(
+    startWith(0),
+    switchMap(() => this.userService.findAll()),
+  );
 
   constructor() {
     effect(() => {
@@ -41,19 +52,11 @@ export class AdminUsersComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.refreshUsers();
-  }
+  ngOnInit(): void {}
 
-  refreshUsers() {
-    this.userService.findAll(this.pageRequest).subscribe((users) => {
-      this.users = users;
-    });
-  }
-
-  refreshView(pageRequest: PageRequest) {
-    this.pageRequest = pageRequest;
-    this.refreshUsers();
+  ngOnDestroy(): void {
+    this.refreshSubject$.next();
+    this.refreshSubject$.complete();
   }
 
   showCreateUpdateModal(user: User, create: boolean): void {
@@ -86,15 +89,15 @@ export class AdminUsersComponent implements OnInit {
   deleteUser(userId: string): void {
     this.userService.delete(userId).subscribe({
       next: () => {
-        this.refreshUsers();
+        this.refreshSubject$.next();
       },
     });
   }
 
   update(user: User) {
     this.userService.update(user).subscribe({
-      next: () => {
-        this.refreshUsers();
+      next: (val) => {
+        this.refreshSubject$.next();
       },
     });
   }

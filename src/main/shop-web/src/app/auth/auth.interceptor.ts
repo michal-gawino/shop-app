@@ -25,8 +25,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           catchError((err) => {
             authService.logout().subscribe({
               next: (val) => {
-                authService.setCurrentUser(null);
-                router.navigate(['/login']);
+                authService.logoutUser();
               },
             });
             return throwError(() => err);
@@ -42,7 +41,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           },
         );
       } else if (err instanceof HttpErrorResponse && err.status === 0) {
-        router.navigate(['/login']);
+        notificationService.error(
+          'Network error',
+          '',
+          {
+            nzDuration: 2500,
+            nzPlacement: 'top',
+          },
+        );
       }
       return throwError(() => err);
     }),

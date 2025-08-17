@@ -1,16 +1,20 @@
 <nz-divider nzText="Best rated products" nzOrientation="left"></nz-divider>
 
-<div class="best-products">
-  @for (product of products; track product.id) {
-     <app-product [view]="productView" [product]="product"></app-product>
-  }
-</div>
+@let data = data$ | async;
 
-<div class="home-category">
-  <nz-divider nzText="Categories" nzOrientation="left"></nz-divider>
-  <div class="category-container">
-    @for (category of categories; track $index) {
-      <app-category [category]="category"></app-category>
+@if (data) {
+  <div class="best-products">
+    @for (product of data.products; track product.id) {
+      <app-product [view]="productView" [product]="product"></app-product>
     }
   </div>
-</div>
+
+  <div class="home-category">
+    <nz-divider nzText="Categories" nzOrientation="left"></nz-divider>
+    <div class="category-container">
+      @for (category of data.categories; track $index) {
+        <app-category [category]="category"></app-category>
+      }
+    </div>
+  </div>
+}
