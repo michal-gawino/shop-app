@@ -1,0 +1,65 @@
+@let data = users$ | async;
+
+<div class="chat-container">
+  <div class="user-panel">
+    <nz-select
+      nzShowSearch
+      nzAllowClear
+      nzPlaceHolder="Select a person"
+      [nzLoading]="data === null"
+      [(ngModel)]="selectedUser"
+      [nzOptionHeightPx]="50"
+      (ngModelChange)="userChanged()"
+    >
+      @for (item of data; track item.id) {
+        <nz-option
+          nzCustomContent
+          [nzLabel]="item.firstName.concat(' ', item.lastName)"
+          [nzValue]="item"
+        >
+          <nz-avatar
+            nzShape="square"
+            [nzSize]="50"
+            [nzSrc]="item.avatar"
+            nzIcon="user"
+          ></nz-avatar>
+          {{ item.firstName }} {{ item.lastName }}
+        </nz-option>
+      }
+    </nz-select>
+
+    <nz-list nzBordered="true">
+      @for (item of usersHistory; track item.id) {
+        <nz-list-item
+          (click)="selectChatUser(item)" [class.item-focus]="chatUser && chatUser.id === item.id"
+        >
+          <nz-list-item-meta
+            [nzAvatar]="item.avatar! != null ? item.avatar : avatarTemplate"
+            [nzTitle]="item.firstName.concat(' ', item.lastName)"
+          ></nz-list-item-meta>
+          <ng-template #avatarTemplate>
+            <nz-avatar nzIcon="user"></nz-avatar>
+          </ng-template>
+        </nz-list-item>
+      }
+    </nz-list>
+  </div>
+
+  <div class="chat-content">
+    <div class="chat-input">
+      <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+        <input
+          type="text"
+          [disabled]="this.chatUser === null"
+          nz-input
+          placeholder="Write a message"
+        />
+      </nz-input-group>
+      <ng-template #suffixButton>
+        <button nz-button nzType="primary" nzSize="large" nzSearch>
+          <nz-icon nzType="send" />
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</div>

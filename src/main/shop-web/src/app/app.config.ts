@@ -21,7 +21,9 @@ import {
   PictureTwoTone,
   DownloadOutline,
   UploadOutline,
-  ShoppingCartOutline} from '@ant-design/icons-angular/icons';
+  ShoppingCartOutline,
+  MessageOutline,
+  SendOutline} from '@ant-design/icons-angular/icons';
 import { routes } from './app.routes';
 
 import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
@@ -52,7 +54,9 @@ const icons: IconDefinition[] = [
   PictureTwoTone,
   DownloadOutline,
   UploadOutline,
-  ShoppingCartOutline
+  ShoppingCartOutline,
+  MessageOutline,
+  SendOutline
 ];
 
 export const appConfig: ApplicationConfig = {

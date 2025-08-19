@@ -2,8 +2,6 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { HomeComponent } from './home/home.component';
-import { inject } from '@angular/core';
-import { AuthService } from './auth/auth.service';
 import { authGuard } from './auth/auth.guard';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { Searchomponent } from './search/search.component';
@@ -12,6 +10,7 @@ import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { AdminProductsComponent } from './admin-products/admin-products.component';
 import { Role } from './shared/models/role';
 import { CartComponent } from './cart/cart.component';
+import { ChatComponent } from './chat/chat.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -56,6 +55,12 @@ export const routes: Routes = [
   {
     path: 'cart',
     component: CartComponent,
+    canActivate: [authGuard],
+    data: { roles: [Role.USER, Role.ADMIN] },
+  },
+    {
+    path: 'chat',
+    component: ChatComponent,
     canActivate: [authGuard],
     data: { roles: [Role.USER, Role.ADMIN] },
   },

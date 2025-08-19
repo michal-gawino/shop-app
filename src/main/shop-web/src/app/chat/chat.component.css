@@ -1,0 +1,40 @@
+.chat-container {
+  display: flex;
+  margin: 4vw;
+  width: 90%;
+  height: 80%;
+  border: solid 1px;
+}
+
+.user-panel {
+  width: 15vw;
+  height: 100%;
+  border-right: solid 1px;
+  nz-select {
+    width: 100%;
+  }
+}
+
+.chat-content {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+  height: 100%;
+  width: 86%;
+}
+
+.chat-input {
+  width: 100%;
+  justify-self: flex-end;
+}
+
+nz-list-item {
+  &:hover{
+    cursor: pointer;
+    background-color: #e7e7e7;
+  }
+}
+
+.item-focus {
+    background-color: #e7e7e7;
+}

@@ -101,7 +101,7 @@ public class UserService {
         List<UserRepresentation> users = usersResource.list();
         return users.stream().map(u -> {
                     List<UserRole> roles = getUserRoles(u.getId());
-                    return new User(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), roles, null);
+                    return new User(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), roles, getAvatar(u.getId()));
                 }
         ).toList();
     }
