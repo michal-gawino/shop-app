@@ -1,6 +1,6 @@
 @if (cart.items.length > 0) {
   <nz-list nzItemLayout="vertical">
-    @for (item of cart.items; track item) {
+    @for (item of cart.items; track item.product.id) {
       <nz-list-item>
         <nz-list-item-meta-avatar></nz-list-item-meta-avatar>
         <nz-list-item-meta>

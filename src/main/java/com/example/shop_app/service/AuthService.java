@@ -61,7 +61,6 @@ public class AuthService {
             throw new LoginException(message);
         }
         setCookies(response, accessTokenResponse);
-        ErrorResponse response1;
         Jwt token = JwtDecoders.fromIssuerLocation(keycloakProperties.getIssuer()).decode(accessTokenResponse.getToken());
         return userService.convertTokenToUser(token);
     }

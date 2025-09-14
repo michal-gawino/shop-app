@@ -12,7 +12,7 @@
   <div class="home-category">
     <nz-divider nzText="Categories" nzOrientation="left"></nz-divider>
     <div class="category-container">
-      @for (category of data.categories; track $index) {
+      @for (category of data.categories; track category) {
         <app-category [category]="category"></app-category>
       }
     </div>

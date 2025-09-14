@@ -2,6 +2,8 @@ server:
   port: 8081
 
 spring:
+  application:
+    name: shop-app
   security:
     oauth2:
       resourceserver:

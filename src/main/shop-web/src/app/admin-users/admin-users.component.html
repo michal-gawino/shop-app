@@ -20,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      @for (data of table.data; track data) {
+      @for (data of table.data; track data.id) {
         <tr>
           <td>{{ data.firstName }}</td>
           <td>{{ data.lastName }}</td>

@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.Response;
 import org.apache.commons.codec.binary.Base64;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -17,6 +18,7 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -80,7 +82,7 @@ public class UserService {
         return new User(id, representation.getFirstName(), representation.getLastName(), representation.getEmail(), targetRoles.stream().toList(), null);
     }
 
-    private void setRoles(String userId, Set<UserRole> rolesToAdd,  Set<UserRole> rolesToRemove) {
+    private void setRoles(String userId, Set<UserRole> rolesToAdd, Set<UserRole> rolesToRemove) {
         RealmResource realm = adminClient.realm(keycloakProperties.getRealm());
         UsersResource usersResource = realm.users();
         ClientRepresentation clientRep = realm.clients().findByClientId(keycloakProperties.getClient()).get(0);
@@ -107,8 +109,18 @@ public class UserService {
     }
 
     public User getCurrentUser() {
-        Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
-        return credentials != null && !String.valueOf(credentials).isEmpty() ? convertTokenToUser((Jwt) credentials) : null;
+        Authentication credentials = SecurityContextHolder.getContext().getAuthentication();
+        return Optional.ofNullable(credentials).map(Authentication::getCredentials).map(cred -> String.valueOf(cred).isEmpty() ? null : convertTokenToUser((Jwt) cred)).orElse(null);
+    }
+
+    public User getById(String id) {
+        RealmResource realmResource = adminClient.realm(keycloakProperties.getRealm());
+        UsersResource usersResource = realmResource.users();
+        UserResource userResource = usersResource.get(id);
+        return Optional.of(userResource.toRepresentation()).map(u -> {
+            List<UserRole> roles = getUserRoles(u.getId());
+            return new User(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), roles, getAvatar(u.getId()));
+        }).orElse(null);
     }
 
     private List<UserRole> getUserRoles(String userId) {

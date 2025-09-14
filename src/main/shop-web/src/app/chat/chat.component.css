@@ -15,26 +15,43 @@
   }
 }
 
-.chat-content {
+.right-panel {
   display: flex;
-  align-items: flex-end;
-  flex-direction: row;
-  height: 100%;
-  width: 86%;
+  flex-direction: column;
+  width: 100%;
 }
 
-.chat-input {
+.chat-content {
+  display: flex;
   width: 100%;
-  justify-self: flex-end;
+  height: 100%;
+  gap: 1vh 2vw;
+  margin-top: 1vw;
+  overflow: auto;
+  flex-direction: column-reverse;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+
+.message {
+  background-color: rgb(236, 234, 234);
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 1.1vh;
+  width: max-content;
+}
+
+.text-right {
+  align-self: flex-end;
 }
 
 nz-list-item {
-  &:hover{
+  &:hover {
     cursor: pointer;
     background-color: #e7e7e7;
   }
 }
 
 .item-focus {
-    background-color: #e7e7e7;
+  background-color: #e7e7e7;
 }
