@@ -1,5 +1,6 @@
 package com.example.shop_app.config;
 
+import org.apache.http.impl.client.HttpClients;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.authorization.client.AuthzClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Map;
 
 @Configuration
 public class KeycloakConfig {
@@ -18,7 +19,9 @@ public class KeycloakConfig {
 
     @Bean
     public AuthzClient authzClient() throws FileNotFoundException {
-        return AuthzClient.create(new FileInputStream("keycloak.json"));
+        org.keycloak.authorization.client.Configuration configuration = new org.keycloak.authorization.client.Configuration(keycloakProperties.getUri(), keycloakProperties.getRealm(), keycloakProperties.getClient(), Map.of("secret", keycloakProperties.getSecret()), HttpClients.createDefault());
+        configuration.setResource(keycloakProperties.getClient());
+        return AuthzClient.create(configuration);
     }
 
     @Bean

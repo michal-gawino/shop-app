@@ -130,7 +130,6 @@ export class ChatComponent implements OnInit, OnDestroy {
         destination: `/app/chat/` + chatId,
         binaryBody: this.textEncoder.encode(JSON.stringify(msg)),
       });
-      this.currentChat?.messages.unshift(msg);
       this.chatHistory = this.chatHistory.sort((x, y) => {
         const firstDate = Math.max(
           ...x.messages.map((m) => Date.parse(m.date)),

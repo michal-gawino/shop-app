@@ -22,6 +22,6 @@ keycloak:
   uri: ${keycloak.uri}
   realm: shop-realm
   client: shop-client
-  secret: InQc3I2ocqiqRVXPYNSwUCBmxoveDUQo
+  secret: ${keycloak.secret}
   issuer: ${keycloak.uri}/realms/${keycloak.realm}
 

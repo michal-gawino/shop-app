@@ -22,11 +22,11 @@ public class ChatController {
     public void listen(Message<ChatMessage> message, @DestinationVariable("id") String chatId) {
         ChatMessage payload = message.getPayload();
 
-        String targetUser = payload.users().stream().filter(e-> !e.equals(payload.senderId())).findFirst().get();
-        template.convertAndSendToUser(targetUser, "/queue/messages", payload, message1 -> {
-            messageService.save(payload);
-            return message1;
+        payload.users().forEach(u -> {
+            template.convertAndSendToUser(u, "/queue/messages", payload);
         });
+
+        messageService.save(payload);
     }
 
 }

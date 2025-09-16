@@ -11,7 +11,7 @@ CLIENT_UUID=$(./kcadm.sh get clients -r $REALM -q clientId=$CLIENT --fields 'id'
 
 ./kcadm.sh create clients/$CLIENT_UUID/roles -r $REALM -s name=USER
 ./kcadm.sh create clients/$CLIENT_UUID/roles -r $REALM -s name=ADMIN
-./kcadm.sh create clients/$CLIENT_UUID/protocol-mappers/models -r $REALM -s name="client roles" -s protocol="openid-connect" -s protocolMapper="oidc-usermodel-client-role-mapper" -s 'config."claim.name"=roles' -s 'config."access.token.claim"=true' -s 'config."userinfo.token.claim"=true'  -s 'config."usermodel.clientRoleMapping.clientId"=$CLIENT' -s 'config."multivalued"=true'
+./kcadm.sh create clients/$CLIENT_UUID/protocol-mappers/models -r $REALM -s name="client roles" -s protocol="openid-connect" -s protocolMapper="oidc-usermodel-client-role-mapper" -s 'config."claim.name"=roles' -s 'config."access.token.claim"=true' -s 'config."userinfo.token.claim"=true'  -s 'config."usermodel.clientRoleMapping.clientId"=shop-client' -s 'config."multivalued"=true'
 
 ./kcadm.sh create users -r $REALM -s username=admin -s enabled=true -s email=admin@test -s emailVerified=true -s firstName=adm -s lastName=adm
 ./kcadm.sh set-password -r $REALM --username admin --new-password admin
