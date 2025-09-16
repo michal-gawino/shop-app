@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: "http://test",
+    apiUrl: "api_placeholder"
 };
