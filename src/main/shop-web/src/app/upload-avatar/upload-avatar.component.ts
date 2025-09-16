@@ -5,7 +5,7 @@ import {
   NzUploadFile,
   NzUploadModule,
 } from 'ng-zorro-antd/upload';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { User } from '../auth/user';
 import { AuthService } from '../auth/auth.service';

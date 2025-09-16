@@ -5,7 +5,7 @@ import { sha256 } from 'js-sha256';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserChatHistory } from '../shared/chat.model';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
