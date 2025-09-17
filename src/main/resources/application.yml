@@ -1,5 +1,8 @@
 server:
-  port: 8081
+  port: 8080
+
+web:
+  url: ${web.url}
 
 spring:
   application:
@@ -9,11 +12,15 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${keycloak.issuer}
-
-
   data:
     mongodb:
       uri: ${mongo.uri}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
 
 upload:
   avatarFolder: ${avatars.location}

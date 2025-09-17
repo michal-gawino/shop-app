@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -27,8 +28,8 @@ public class MongoConfig {
     @EventListener(ContextRefreshedEvent.class)
     public void initProducts() throws IOException {
         if (productService.count() == 0) {
-            File productsFile = new ClassPathResource("products.json").getFile();
-            String content = Files.readString(productsFile.toPath());
+            ClassPathResource resource = new ClassPathResource("products.json");
+            String content =new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.findAndRegisterModules();
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

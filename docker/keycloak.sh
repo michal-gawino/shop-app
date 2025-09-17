@@ -1,8 +1,9 @@
 REALM=shop-realm
 CLIENT=shop-client
+SERVER=http://localhost:8080
 cd /opt/keycloak/bin
-./kcadm.sh config credentials --server http://localhost:8080 --realm master --user admin --password admin
-./kcadm.sh create realms -s realm=$REALM -s enabled=true --server http://localhost:8080
+./kcadm.sh config credentials --server $SERVER --realm master --user admin --password admin
+./kcadm.sh create realms -s realm=$REALM -s enabled=true --server $SERVER
 ./kcadm.sh create clients -r $REALM -s clientId=$CLIENT -s directAccessGrantsEnabled=true -s publicClient=false -s secret=secret -s enabled=true
 
 CLIENT_UUID=$(./kcadm.sh get clients -r $REALM -q clientId=$CLIENT --fields 'id' | grep -oE "[a-zA-Z0-9-]{3}+")

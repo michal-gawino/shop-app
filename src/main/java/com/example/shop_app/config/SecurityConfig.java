@@ -28,12 +28,15 @@ public class SecurityConfig {
     @Autowired
     private CookieService cookieService;
 
+    @Autowired
+    private WebProperties webProperties;
+
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> {
                     requests.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                            .requestMatchers("/auth/**", "/error", "/user/register", "/ws/**", "/message/**").permitAll()
+                            .requestMatchers("/auth/**", "/error", "/user/register", "/actuator/health").permitAll()
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.NEVER))
@@ -68,7 +71,7 @@ public class SecurityConfig {
     @Bean
     UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedOrigins(List.of(webProperties.getUrl()));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Access-Control-Allow-Origin", "Access-Control-Request-Headers", "Content-Type", "X-Requested-With"));
         configuration.setAllowCredentials(true);
