@@ -9,7 +9,7 @@ COPY src ./src
 
 RUN mvn package -DskipTests
 
-FROM openjdk:21-bullseye
+FROM amazoncorretto:21.0.9-al2023-headless
 
 WORKDIR /app
 
